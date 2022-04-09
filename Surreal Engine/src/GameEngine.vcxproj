@@ -1,0 +1,380 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3167A812-5D2C-4EE9-ACFD-F0E959384755}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>spinnycube</RootNamespace>
+    <ProjectName>GameEngine</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)include;$(SolutionDir)extern\glfw-2.7.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)_Debug</TargetName>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)include;$(SolutionDir)extern\glfw-2.7.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\</OutDir>
+    <IntDir>$(ProjectName)_$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINDOWS_TARGET_PLATFORM="$(TargetPlatformVersion)";MEMORY_LOGS_DIR=R"($(SolutionDir))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)dist\Math\include;$(SolutionDir)dist\SB6\include;$(SolutionDir)dist\GLFW\include;$(SolutionDir)dist\File\include;$(SolutionDir)dist\AzulCore\include</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StringPooling>false</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <SDLCheck>
+      </SDLCheck>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <ForcedIncludeFiles>"$(ProjectDir)/Surreal Engine/MemTracker/Framework.h";%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>MSVCRTD.lib</IgnoreSpecificDefaultLibraries>
+      <ShowProgress>NotSet</ShowProgress>
+      <LinkStatus>
+      </LinkStatus>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>xmllite.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\dist\AzulCore\include\AzulCore.h" />
+    <ClInclude Include="..\dist\AzulCore\include\AzulFileHdr.h" />
+    <ClInclude Include="..\dist\AzulCore\include\AzulHelper.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Camera.h" />
+    <ClInclude Include="..\dist\AzulCore\include\DebugOut.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Engine.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GpuVertTypes.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_ColorByPosition.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_ColorNoTexture.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_ColorNoTextureLight.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_Sprite.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_SpriteBox.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_TextureFlat.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_TextureLight.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_WireframeAutoColor.h" />
+    <ClInclude Include="..\dist\AzulCore\include\GraphicsObject_WireframeConstantColor.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Image.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Keyboard.h" />
+    <ClInclude Include="..\dist\AzulCore\include\LibrarySetup.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Model.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Mouse.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Rect.h" />
+    <ClInclude Include="..\dist\AzulCore\include\ShaderObject.h" />
+    <ClInclude Include="..\dist\AzulCore\include\Texture.h" />
+    <ClInclude Include="..\dist\AzulCore\include\TextureTGA.h" />
+    <ClInclude Include="..\dist\File\include\File.h" />
+    <ClInclude Include="..\dist\GLFW\include\GL\glfw.h" />
+    <ClInclude Include="..\dist\Math\include\Align16.h" />
+    <ClInclude Include="..\dist\Math\include\Constants.h" />
+    <ClInclude Include="..\dist\Math\include\Enum.h" />
+    <ClInclude Include="..\dist\Math\include\MathApp.h" />
+    <ClInclude Include="..\dist\Math\include\MathEngine.h" />
+    <ClInclude Include="..\dist\Math\include\Matrix.h" />
+    <ClInclude Include="..\dist\Math\include\Quat.h" />
+    <ClInclude Include="..\dist\Math\include\QuatApp.h" />
+    <ClInclude Include="..\dist\Math\include\Util.h" />
+    <ClInclude Include="..\dist\Math\include\Vect.h" />
+    <ClInclude Include="..\dist\Math\include\VectApp.h" />
+    <ClInclude Include="..\dist\SB6\include\arcball.h" />
+    <ClInclude Include="..\dist\SB6\include\GL\gl3w.h" />
+    <ClInclude Include="..\dist\SB6\include\GL\glcorearb.h" />
+    <ClInclude Include="..\dist\SB6\include\GL\glext.h" />
+    <ClInclude Include="..\dist\SB6\include\GL\glxext.h" />
+    <ClInclude Include="..\dist\SB6\include\GL\wglext.h" />
+    <ClInclude Include="..\dist\SB6\include\object.h" />
+    <ClInclude Include="..\dist\SB6\include\sb6.h" />
+    <ClInclude Include="..\dist\SB6\include\sb6ext.h" />
+    <ClInclude Include="..\dist\SB6\include\sb6ktx.h" />
+    <ClInclude Include="..\dist\SB6\include\sb6mfile.h" />
+    <ClInclude Include="..\dist\SB6\include\shader.h" />
+    <ClInclude Include="..\dist\SB6\include\vmath.h" />
+    <ClInclude Include="Surreal Engine\Alarmable.h" />
+    <ClInclude Include="Surreal Engine\AlarmableAttorney.h" />
+    <ClInclude Include="Surreal Engine\AlarmableManager.h" />
+    <ClInclude Include="Surreal Engine\AlarmDeregistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\AlarmRegistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\CameraManager.h" />
+    <ClInclude Include="Surreal Engine\CameraManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\Collidable.h" />
+    <ClInclude Include="Surreal Engine\CollidableGroup.h" />
+    <ClInclude Include="Surreal Engine\CollidableManager.h" />
+    <ClInclude Include="Surreal Engine\CollidableAttorney.h" />
+    <ClInclude Include="Surreal Engine\CollisionDeregistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\CollisionDispatch.h" />
+    <ClInclude Include="Surreal Engine\CollisionDispatchBase.h" />
+    <ClInclude Include="Surreal Engine\CollisionRegistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\CollisionTestCommandBase.h" />
+    <ClInclude Include="Surreal Engine\CollisionTestPairCommand.h" />
+    <ClInclude Include="Surreal Engine\CollisionTestSelfCommand.h" />
+    <ClInclude Include="Surreal Engine\CollisionVolume.h" />
+    <ClInclude Include="Surreal Engine\CollisionVolumeBSphere.h" />
+    <ClInclude Include="Surreal Engine\Colors.h" />
+    <ClInclude Include="Surreal Engine\CommandBase.h" />
+    <ClInclude Include="Surreal Engine\Drawable.h" />
+    <ClInclude Include="Surreal Engine\DrawableAttorney.h" />
+    <ClInclude Include="Surreal Engine\DrawableManager.h" />
+    <ClInclude Include="Surreal Engine\DrawDeregistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\DrawRegistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\EventType.h" />
+    <ClInclude Include="Surreal Engine\ScreenLog.h" />
+    <ClInclude Include="Surreal Engine\ScreenLogAttorney.h" />
+    <ClInclude Include="Surreal Engine\SpriteFontManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\FreezeTime.h" />
+    <ClInclude Include="Surreal Engine\GameObject.h" />
+    <ClInclude Include="Surreal Engine\GameObjectAttorney.h" />
+    <ClInclude Include="Surreal Engine\GameObjectEntryCommand.h" />
+    <ClInclude Include="Surreal Engine\GameObjectExitCommand.h" />
+    <ClInclude Include="Surreal Engine\ImageManager.h" />
+    <ClInclude Include="Surreal Engine\ImageManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\Inputable.h" />
+    <ClInclude Include="Surreal Engine\InputableAttorney.h" />
+    <ClInclude Include="Surreal Engine\InputDeregistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\InputRegistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\KeyboardEventManager.h" />
+    <ClInclude Include="Surreal Engine\ModelManager.h" />
+    <ClInclude Include="Surreal Engine\ModelManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\RegistrationState.h" />
+    <ClInclude Include="Surreal Engine\Scene.h" />
+    <ClInclude Include="Surreal Engine\SceneAttorney.h" />
+    <ClInclude Include="Surreal Engine\SceneChangeCommand.h" />
+    <ClInclude Include="Surreal Engine\SceneChangeCommandBase.h" />
+    <ClInclude Include="Surreal Engine\SceneChangeNullCommand.h" />
+    <ClInclude Include="Surreal Engine\SceneManager.h" />
+    <ClInclude Include="Surreal Engine\SceneManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\SceneNull.h" />
+    <ClInclude Include="Surreal Engine\SceneRegistrationBroker.h" />
+    <ClInclude Include="Surreal Engine\ShaderManager.h" />
+    <ClInclude Include="Surreal Engine\ShaderManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\SingleKeyEventManager.h" />
+    <ClInclude Include="Surreal Engine\SpriteFont.h" />
+    <ClInclude Include="Surreal Engine\SpriteFontManager.h" />
+    <ClInclude Include="Surreal Engine\SpriteString.h" />
+    <ClInclude Include="Surreal Engine\Surreal.h" />
+    <ClInclude Include="Surreal Engine\MemTracker\Framework.h" />
+    <ClInclude Include="Surreal Engine\MemTracker\ProjectSettings.h" />
+    <ClInclude Include="Surreal Engine\SurrealAttorney.h" />
+    <ClInclude Include="Surreal Engine\SurrealMathTools.h" />
+    <ClInclude Include="Surreal Engine\SurrealSprite.h" />
+    <ClInclude Include="Surreal Engine\TextureManager.h" />
+    <ClInclude Include="Surreal Engine\TextureManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\TimeManager.h" />
+    <ClInclude Include="Surreal Engine\TimeManagerAttorney.h" />
+    <ClInclude Include="Surreal Engine\Updateable.h" />
+    <ClInclude Include="Surreal Engine\UpdateableAttorney.h" />
+    <ClInclude Include="Surreal Engine\UpdateableManager.h" />
+    <ClInclude Include="Surreal Engine\UpdateDeregistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\UpdateRegistrationCommand.h" />
+    <ClInclude Include="Surreal Engine\Visualizer.h" />
+    <ClInclude Include="Surreal Engine\VisualizerAttorney.h" />
+    <ClInclude Include="Surreal Engine\VisualizerCommand.h" />
+    <ClInclude Include="Surreal Engine\VisualizerCommandBase.h" />
+    <ClInclude Include="Surreal Engine\VisualizerCommandFactory.h" />
+    <ClInclude Include="Surreal Engine\VisualizerCommandPool.h" />
+    <ClInclude Include="User Code\Bubble.h" />
+    <ClInclude Include="User Code\BubbleFactory.h" />
+    <ClInclude Include="User Code\BubbleManager.h" />
+    <ClInclude Include="User Code\BubblePool.h" />
+    <ClInclude Include="User Code\Bullet.h" />
+    <ClInclude Include="User Code\BulletFactory.h" />
+    <ClInclude Include="User Code\BulletPool.h" />
+    <ClInclude Include="User Code\Fish.h" />
+    <ClInclude Include="User Code\FishManager.h" />
+    <ClInclude Include="User Code\Food.h" />
+    <ClInclude Include="User Code\FoodFactory.h" />
+    <ClInclude Include="User Code\FoodManager.h" />
+    <ClInclude Include="User Code\FoodPool.h" />
+    <ClInclude Include="User Code\GodCam.h" />
+    <ClInclude Include="User Code\Hud.h" />
+    <ClInclude Include="User Code\Hud2.h" />
+    <ClInclude Include="User Code\HudTest.h" />
+    <ClInclude Include="User Code\Hydra.h" />
+    <ClInclude Include="User Code\HydraFactory.h" />
+    <ClInclude Include="User Code\HydraManager.h" />
+    <ClInclude Include="User Code\HydraPool.h" />
+    <ClInclude Include="User Code\HydraTest.h" />
+    <ClInclude Include="User Code\SceneOne.h" />
+    <ClInclude Include="User Code\SceneTwo.h" />
+    <ClInclude Include="User Code\World.h" />
+    <ClInclude Include="User Code\World2.h" />
+    <ClInclude Include="User Code\WorldPlane.h" />
+    <ClInclude Include="User Code\SceneDemo.h" />
+    <ClInclude Include="User Code\SpaceFrigate.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\dist\AzulCore\lib\AzulCore_Debug.lib" />
+    <Library Include="..\dist\File\lib\File_Debug.lib" />
+    <Library Include="..\dist\GLFW\lib\GLFW_Debug.lib" />
+    <Library Include="..\dist\Math\lib\MathEngine_Debug.lib" />
+    <Library Include="..\dist\SB6\lib\sb6_Debug.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Surreal Engine\Alarmable.cpp" />
+    <ClCompile Include="Surreal Engine\AlarmableManager.cpp" />
+    <ClCompile Include="Surreal Engine\AlarmDeregistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\AlarmRegistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\CameraManager.cpp" />
+    <ClCompile Include="Surreal Engine\Collidable.cpp" />
+    <ClCompile Include="Surreal Engine\CollidableGroup.cpp" />
+    <ClCompile Include="Surreal Engine\CollidableManager.cpp" />
+    <ClCompile Include="Surreal Engine\CollisionDeregistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\CollisionRegistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\CollisionTestCommandBase.cpp" />
+    <ClCompile Include="Surreal Engine\CollisionTestPairCommand.cpp" />
+    <ClCompile Include="Surreal Engine\CollisionTestSelfCommand.cpp" />
+    <ClCompile Include="Surreal Engine\CollisionVolumeBSphere.cpp" />
+    <ClCompile Include="Surreal Engine\CommandBase.cpp" />
+    <ClCompile Include="Surreal Engine\Drawable.cpp" />
+    <ClCompile Include="Surreal Engine\DrawableManager.cpp" />
+    <ClCompile Include="Surreal Engine\DrawDeregistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\DrawRegistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\FreezeTime.cpp" />
+    <ClCompile Include="Surreal Engine\GameObject.cpp" />
+    <ClCompile Include="Surreal Engine\GameObjectEntryCommand.cpp" />
+    <ClCompile Include="Surreal Engine\GameObjectExitCommand.cpp" />
+    <ClCompile Include="Surreal Engine\ImageManager.cpp" />
+    <ClCompile Include="Surreal Engine\Inputable.cpp" />
+    <ClCompile Include="Surreal Engine\InputDeregistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\InputRegistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\KeyboardEventManager.cpp" />
+    <ClCompile Include="Surreal Engine\ModelManager.cpp" />
+    <ClCompile Include="Surreal Engine\Scene.cpp" />
+    <ClCompile Include="Surreal Engine\SceneChangeCommand.cpp" />
+    <ClCompile Include="Surreal Engine\SceneChangeCommandBase.cpp" />
+    <ClCompile Include="Surreal Engine\SceneChangeNullCommand.cpp" />
+    <ClCompile Include="Surreal Engine\SceneManager.cpp" />
+    <ClCompile Include="Surreal Engine\SceneRegistrationBroker.cpp" />
+    <ClCompile Include="Surreal Engine\ScreenLog.cpp" />
+    <ClCompile Include="Surreal Engine\ShaderManager.cpp" />
+    <ClCompile Include="Surreal Engine\SingleKeyEventManager.cpp" />
+    <ClCompile Include="Surreal Engine\SpriteFont.cpp" />
+    <ClCompile Include="Surreal Engine\SpriteFontManager.cpp" />
+    <ClCompile Include="Surreal Engine\SpriteString.cpp" />
+    <ClCompile Include="Surreal Engine\Surreal.cpp" />
+    <ClCompile Include="Surreal Engine\main.cpp" />
+    <ClCompile Include="Surreal Engine\SurrealMathTools.cpp" />
+    <ClCompile Include="Surreal Engine\SurrealSprite.cpp" />
+    <ClCompile Include="Surreal Engine\TextureManager.cpp" />
+    <ClCompile Include="Surreal Engine\TimeManager.cpp" />
+    <ClCompile Include="Surreal Engine\Updateable.cpp" />
+    <ClCompile Include="Surreal Engine\UpdateableManager.cpp" />
+    <ClCompile Include="Surreal Engine\UpdateDeregistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\UpdateRegistrationCommand.cpp" />
+    <ClCompile Include="Surreal Engine\Visualizer.cpp" />
+    <ClCompile Include="Surreal Engine\VisualizerCommand.cpp" />
+    <ClCompile Include="Surreal Engine\VisualizerCommandFactory.cpp" />
+    <ClCompile Include="Surreal Engine\VisualizerCommandPool.cpp" />
+    <ClCompile Include="Surreal Resources\GameEnd.cpp" />
+    <ClCompile Include="Surreal Resources\GameInitialize.cpp" />
+    <ClCompile Include="Surreal Resources\LoadResources.cpp" />
+    <ClCompile Include="User Code\Bubble.cpp" />
+    <ClCompile Include="User Code\BubbleFactory.cpp" />
+    <ClCompile Include="User Code\BubbleManager.cpp" />
+    <ClCompile Include="User Code\BubblePool.cpp" />
+    <ClCompile Include="User Code\Bullet.cpp" />
+    <ClCompile Include="User Code\BulletFactory.cpp" />
+    <ClCompile Include="User Code\BulletPool.cpp" />
+    <ClCompile Include="User Code\Fish.cpp" />
+    <ClCompile Include="User Code\FishManager.cpp" />
+    <ClCompile Include="User Code\Food.cpp" />
+    <ClCompile Include="User Code\FoodFactory.cpp" />
+    <ClCompile Include="User Code\FoodManager.cpp" />
+    <ClCompile Include="User Code\FoodPool.cpp" />
+    <ClCompile Include="User Code\GodCam.cpp" />
+    <ClCompile Include="User Code\Hud.cpp" />
+    <ClCompile Include="User Code\Hud2.cpp" />
+    <ClCompile Include="User Code\HudTest.cpp" />
+    <ClCompile Include="User Code\Hydra.cpp" />
+    <ClCompile Include="User Code\HydraFactory.cpp" />
+    <ClCompile Include="User Code\HydraManager.cpp" />
+    <ClCompile Include="User Code\HydraPool.cpp" />
+    <ClCompile Include="User Code\HydraTest.cpp" />
+    <ClCompile Include="User Code\SceneOne.cpp" />
+    <ClCompile Include="User Code\SceneTwo.cpp" />
+    <ClCompile Include="User Code\World.cpp" />
+    <ClCompile Include="User Code\World2.cpp" />
+    <ClCompile Include="User Code\WorldPlane.cpp" />
+    <ClCompile Include="User Code\SceneDemo.cpp" />
+    <ClCompile Include="User Code\SpaceFrigate.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
