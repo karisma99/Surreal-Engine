@@ -1,26 +1,23 @@
 // SpaceFrigate 
 
 #include "HydraTest.h"
-#include "../Surreal Engine/ModelManager.h"
-#include "../Surreal Engine/ShaderManager.h"
-#include "../Surreal Engine/TextureManager.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/Drawable.h"
-#include "../Surreal Engine/Updateable.h"
-#include "../Surreal Engine/Alarmable.h"
-#include "../Surreal Engine/Inputable.h"
-#include "../Surreal Engine/Collidable.h"
-#include "../Surreal Engine/SceneManager.h"
+#include "Surreal Engine/ModelManager.h"
+#include "Surreal Engine/ShaderManager.h"
+#include "Surreal Engine/TextureManager.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/Drawable.h"
+#include "Surreal Engine/Updateable.h"
+#include "Surreal Engine/Alarmable.h"
+#include "Surreal Engine/Inputable.h"
+#include "Surreal Engine/Collidable.h"
+#include "Surreal Engine/SceneManager.h"
+#include "Surreal Engine/Colors.h"
 
 HydraTest::HydraTest()
 {
-	// Light
-	Vect LightColor(1.50f, 1.50f, 1.50f, 1.0f);
-	Vect LightPos(1.0f, 1.0f, 1.0f, 1.0f);
-	pGObj_SpaceFrigateLight = new GraphicsObject_TextureLight(ModelManager::Get("Hydra"), ShaderManager::Get("Light"), TextureManager::Get("HydraColor"), LightColor, LightPos);
+	pGObj_SpaceFrigateLight = new GraphicsObject_TextureFlat(ModelManager::Get("Hydra"), TextureManager::Get("HydraColor"));
 
-	Vect Blue(0.0f, 0.0f, 1.0f, 1.0f);
-	pGObj_SpaceshipBSphere = new GraphicsObject_WireframeConstantColor(ModelManager::Get("Sphere"), ShaderManager::Get("ConstantColor"), Blue);
+	pGObj_SpaceshipBSphere = new GraphicsObject_ColorFlat(ModelManager::Get("Sphere"), Color::Blue);
 
 	// Spaceship
 	ShipScale.set(SCALE, 5.0f, 15.0f, 5.0f);
@@ -40,7 +37,7 @@ HydraTest::HydraTest()
 
 	Collidable::SetCollidableGroup<HydraTest>();
 	Collidable::SubmitCollisionRegistration();
-	this->SetColliderModel(this->pGObj_SpaceFrigateLight->getModel());
+	this->SetColliderModel(this->pGObj_SpaceFrigateLight->GetModel(), AABB);
 }
 
 HydraTest::~HydraTest()
@@ -62,8 +59,8 @@ void HydraTest::Update()
 
 	//*
 	// Adjusting the spaceship's bounding sphere
-	Vect vBSSize = pGObj_SpaceFrigateLight->getModel()->getRadius() * Vect(1, 1, 1);
-	Vect vBSPos = pGObj_SpaceFrigateLight->getModel()->getCenter();
+	Vect vBSSize = pGObj_SpaceFrigateLight->GetModel()->GetRadius() * Vect(1, 1, 1);
+	Vect vBSPos = pGObj_SpaceFrigateLight->GetModel()->GetCenter();
 
 	// Adjust the Bounding Sphere's position and scale to fit the Ship's center and scale
 	Matrix worldBS = Matrix(SCALE, vBSSize) * Matrix(TRANS, vBSPos) * world;
@@ -71,7 +68,7 @@ void HydraTest::Update()
 	//pGObj_SpaceshipBSphere->SetWorld(worldBS);
 
 	// Toggle the bounding sphere's visibility
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_SPACE))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::SPACE_KEY))
 	{
 		BsphereToggle = true;
 		//DebugMsg::out("Bounding sphere: On\n");
@@ -88,17 +85,17 @@ void HydraTest::Update()
 
 void HydraTest::Draw()
 {
-	pGObj_SpaceFrigateLight->Render(this->pCam);
+	pGObj_SpaceFrigateLight->Render();
 	if (BsphereToggle)
 	{
-		pGObj_SpaceshipBSphere->Render(this->pCam);
+		pGObj_SpaceshipBSphere->Render();
 	}
 }
 
 void HydraTest::Collision(SpaceFrigate* sf)
 {
 	sf;
-	DebugMsg::out("Hydra Collide Frigate\n");
+	Trace::out("Hydra Collide Frigate\n");
 }
 
 void HydraTest::Alarm0()

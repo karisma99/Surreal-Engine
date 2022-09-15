@@ -3,7 +3,7 @@
 #ifndef _BubbleFactory
 #define _BubbleFactory
 
-#include "AzulCore.h"
+#include "Matrix.h"
 #include "BubblePool.h"
 
 class GameObject;

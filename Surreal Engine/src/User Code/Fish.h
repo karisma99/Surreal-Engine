@@ -1,14 +1,14 @@
-// SpaceFrigate
+// Fish
 #ifndef _Fish
 #define _Fish
 
 #include "../Surreal Engine/GameObject.h"
-#include "AzulCore.h"
-#include "Camera.h"
+#include "Surreal Graphics/Camera.h"
 #include <list>
+#include "Surreal Engine/Keyboard.h"
 
-class GraphicsObject_TextureLight;
-class GraphicsObject_WireframeConstantColor;
+class GraphicsObject_TextureFlat;
+class GraphicsObject_ColorFlat;
 class Hydra;
 class Food;
 
@@ -22,21 +22,24 @@ public:
 
 	void Collision(Hydra*);
 	void Collision(Food*);
+	virtual void CollisionTerrain();
 	Matrix GetPosition();
 
 private:
 
 	virtual void Update();
 	virtual void Draw();
-	virtual void KeyPressed(AZUL_KEY k);
+	virtual void KeyPressed(SURREAL_KEY k);
 	virtual void Alarm0();
+	virtual void Alarm1();
 
 	void SetModels();
+	void CheckModelSwitch();
 
-	GraphicsObject_TextureLight* pGObj_FishLight;
-	GraphicsObject_WireframeConstantColor* pGObj_FishBSphere;
+	GraphicsObject_TextureFlat* pGObj_FishLight;
+	GraphicsObject_ColorFlat* pGObj_FishBSphere;
 
-	using ModelCollection = std::list<GraphicsObject_TextureLight*>;
+	using ModelCollection = std::list<GraphicsObject_TextureFlat*>;
 	ModelCollection modelCol;
 
 	using ModelCollectionRef = ModelCollection::iterator;
@@ -44,12 +47,13 @@ private:
 	// Fish vars
 	Matrix FishScale;
 	Matrix FishRotTrans;
-	const float FishTransSpeed = 0.1f;
-	const float FishRotAng = .001f;
+	const float FishTransSpeed = 300.0f;
+	const float FishRotAng = 2.0f;
 	bool BsphereToggle = false;
 	Vect CamLookAt;
 	Vect CamShipOffset;
 
+	GraphicsObject_TextureFlat* currentObject;
 	ModelCollectionRef modelRef;
 	bool moving;
 	bool forward;

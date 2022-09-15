@@ -1,6 +1,6 @@
 
 #include "SpriteFont.h"
-#include "AzulCore.h"
+#include <codecvt>
 #include <xmllite.h>
 #include <shlwapi.h>
 #include "TextureManager.h"
@@ -22,7 +22,7 @@ SpriteFont::SpriteFont(std::string path)
 	FontTexture = TextureManager::Get(path);
 
 	// Parse associated XML file
-	XMLtoCollection(path + ".xml");
+	XMLtoCollection("../Assets/" + path + ".xml");
 }
 
 SpriteFont::~SpriteFont()
@@ -114,9 +114,10 @@ void SpriteFont::XMLtoCollection(std::string filename)
 				Glyph* g = new SurrealSprite(s);
 				g->SetAngle(0);
 				g->SetPosition(0.0f, (float)Surreal::GetHeight());
+				g->SetScaleFactor(30, 30);
 				fontmap.insert(fontmap.end(), std::pair<int, Glyph*>(key, g));
 
-				DebugMsg::out("Font %s: creating glyph for ASCII %i\n", Name.c_str(), key);
+				Trace::out("Font %s: creating glyph for ASCII %i\n", Name.c_str(), key);
 			}
 
 		} break;
@@ -169,7 +170,7 @@ void SpriteFont::ElementTextToInt(IXmlReader* pReader, int& out)
 
 SpriteFont::Glyph* SpriteFont::GetGlyph(char c)
 {
-	return fontmap[c];
+	return fontmap.find(c)->second;
 }
 
 

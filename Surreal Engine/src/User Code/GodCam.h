@@ -2,9 +2,8 @@
 #ifndef _GodCam
 #define _GodCam
 
-#include "../Surreal Engine/GameObject.h"
-#include "AzulCore.h"
-#include "Camera.h"
+#include "Surreal Engine/GameObject.h"
+#include "Surreal Graphics/Camera.h"
 
 class SceneOne;
 class SceneTwo;

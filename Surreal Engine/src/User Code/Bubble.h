@@ -3,10 +3,9 @@
 #ifndef _Bubble 
 #define _Bubble 
 
-#include "AzulCore.h"
 #include "../Surreal Engine/GameObject.h"
 
-class GraphicsObject_WireframeConstantColor;
+class GraphicsObject_ColorFlat;
 class SurrealSprite;
 class Hydra;
 class Bubble;
@@ -37,7 +36,7 @@ private:
 	Matrix Pos;
 	Matrix StartPos; 
 	Vect Direction;
-	GraphicsObject_WireframeConstantColor* pGObj_BubbleSphere;
+	GraphicsObject_ColorFlat* pGObj_BubbleSphere;
 };
 
 #endif _Bubble 

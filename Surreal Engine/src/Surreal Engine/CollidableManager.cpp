@@ -1,4 +1,4 @@
-//DrawableManager
+//CollidableManager
 
 #include "CollidableManager.h"
 
@@ -43,6 +43,15 @@ CollidableGroup* CollidableManager::GetColGroup(CollidableManager::STypeID ind)
 
 void CollidableManager::ProcessCollisions()
 {
+	for (CollidableGroup* it : ColGroupCollection)
+	{
+		if (it)
+		{
+			it->CalculateAABB();
+		}
+		
+	}
+
 	for (CollisionTestCommands::iterator it = colTestCommands.begin(); it != colTestCommands.end(); it++)
 	{
 		(*it)->Execute();

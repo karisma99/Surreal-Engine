@@ -7,7 +7,7 @@ public:
 	SceneChangeCommandBase();
 	SceneChangeCommandBase(const SceneChangeCommandBase& c) = delete;
 	SceneChangeCommandBase& operator = (const SceneChangeCommandBase& t) = delete;
-	~SceneChangeCommandBase();
+	virtual ~SceneChangeCommandBase();
 
 	virtual void Execute();
 private:

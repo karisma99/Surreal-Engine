@@ -9,7 +9,7 @@ FoodPool::FoodPool()
 
 FoodPool::~FoodPool()
 {
-	DebugMsg::out("Deleting Food\n");
+	Trace::out("Deleting Food\n");
 
 	while (!createdItems.empty())
 	{
@@ -24,13 +24,13 @@ Food* FoodPool::GetFood()
 
 	if (recycledItems.empty())
 	{
-		DebugMsg::out("New Food\n");
+		Trace::out("New Food\n");
 		b = new Food();
 		createdItems.push(b);
 	}
 	else
 	{
-		DebugMsg::out("Recycled Food\n");
+		Trace::out("Recycled Food\n");
 
 		b = recycledItems.top();
 		recycledItems.pop();
@@ -41,6 +41,6 @@ Food* FoodPool::GetFood()
 void FoodPool::ReturnFood(Food* b)
 {
 	recycledItems.push(static_cast<Food*>(b));
-	DebugMsg::out("Recycled Food\n");
+	Trace::out("Recycled Food\n");
 
 }

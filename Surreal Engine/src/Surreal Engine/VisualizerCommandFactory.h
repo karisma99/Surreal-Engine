@@ -3,8 +3,8 @@
 #ifndef _VisualizerCommandFactory
 #define _VisualizerCommandFactory
 
-#include "AzulCore.h"
 #include "VisualizerCommandPool.h"
+#include "Collidable.h"
 
 class VisualizerCommand; 
 class VisualizerCommandPool;
@@ -30,14 +30,14 @@ private:
 
 	// Note: Some factory designs also keep a list of 'currently active' objects
 	// Often useful at cleanup time 
-	VisualizerCommand* privCreateCommand(Matrix m, Vect v);
+	VisualizerCommand* privCreateCommand(Matrix m, Vect v, Collidable::VolumeType vol);
 	void privRecycleCommand(VisualizerCommand* cmd);
 	void privDelete();
 
 public:
 
 	// Static Methods
-	static VisualizerCommand* CreateCommand(Matrix m, Vect v) { return Instance().privCreateCommand(m, v); };
+	static VisualizerCommand* CreateCommand(Matrix m, Vect v, Collidable::VolumeType vol) { return Instance().privCreateCommand(m, v, vol); };
 	static void RecycleCommand(VisualizerCommand* cmd) { Instance().privRecycleCommand(cmd); };
 
 	static void Delete() { Instance().privDelete(); }

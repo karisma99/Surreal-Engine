@@ -3,10 +3,10 @@
 #ifndef _Food
 #define _Food
 
-#include "AzulCore.h"
-#include "../Surreal Engine/GameObject.h"
+#include "Surreal Engine/GameObject.h"
+#include "Matrix.h"
 
-class GraphicsObject_ColorNoTexture;
+class GraphicsObject_ColorFlat;
 class Fish;
 class FoodFactory;
 
@@ -36,7 +36,7 @@ private:
 	Matrix Pos;
 	Matrix StartPos;
 	Vect Direction;
-	GraphicsObject_ColorNoTexture* pGObj_BubbleSphere;
+	GraphicsObject_ColorFlat* pGObj_BubbleSphere;
 };
 
 #endif _Food

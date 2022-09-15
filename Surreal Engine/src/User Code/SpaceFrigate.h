@@ -3,11 +3,10 @@
 #define _SpaceFrigate
 
 #include "../Surreal Engine/GameObject.h"
-#include "AzulCore.h"
-#include "Camera.h"
+#include "Surreal Graphics/Camera.h"
 
-class GraphicsObject_TextureLight;
-class GraphicsObject_WireframeConstantColor;
+class GraphicsObject_TextureFlat;
+class GraphicsObject_ColorFlat;
 class HydraTest;
 
 class SpaceFrigate : public GameObject
@@ -28,10 +27,10 @@ private:
 	virtual void Draw();
 	virtual void Alarm0();
 	virtual void Alarm1();
-	virtual void KeyPressed(AZUL_KEY k);
+	virtual void KeyPressed(SURREAL_KEY k);
 
-	GraphicsObject_TextureLight* pGObj_SpaceFrigateLight;
-	GraphicsObject_WireframeConstantColor* pGObj_SpaceshipBSphere;
+	GraphicsObject_TextureFlat* pGObj_SpaceFrigateLight;
+	GraphicsObject_ColorFlat* pGObj_SpaceshipBSphere;
 
 	// Spaceship vars
 	Matrix ShipScale;

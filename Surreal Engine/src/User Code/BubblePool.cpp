@@ -9,7 +9,7 @@ BubblePool::BubblePool()
 
 BubblePool::~BubblePool()
 {
-	DebugMsg::out("Deleting Bubbles\n");
+	Trace::out("Deleting Bubbles\n");
 
 	while (!activeItems.empty())
 	{
@@ -30,12 +30,12 @@ Bubble* BubblePool::GetBubble()
 
 	if (recycledItems.empty())
 	{
-		DebugMsg::out("New Bubble\n");
+		Trace::out("New Bubble\n");
 		b = new Bubble();
 	}
 	else
 	{
-		DebugMsg::out("Recycled Bubble\n");
+		Trace::out("Recycled Bubble\n");
 
 		b = recycledItems.top();
 		recycledItems.pop();
@@ -50,6 +50,6 @@ void BubblePool::ReturnBubble(Bubble* b)
 	activeItems.pop();
 
 	recycledItems.push(static_cast<Bubble*>(b));
-	DebugMsg::out("Recycled Bubble\n");
+	Trace::out("Recycled Bubble\n");
 
 }

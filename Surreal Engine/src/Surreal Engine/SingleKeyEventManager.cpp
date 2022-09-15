@@ -3,14 +3,14 @@
 #include "SingleKeyEventManager.h"
 #include "InputableAttorney.h"
 
-SingleKeyEventManager::SingleKeyEventManager(AZUL_KEY k)
+SingleKeyEventManager::SingleKeyEventManager(SURREAL_KEY k)
 {
 	key = k;
 }
 
 void SingleKeyEventManager::ProcessKeyEvent()
 {
-	if (Keyboard::GetKeyState(key) && !wasPressed)
+	if (Keyboard::GetKeyInputState(key) && !wasPressed)
 	{	//Was not pressed but now is
 		for (auto& it : keyPressCol)
 		{
@@ -20,7 +20,7 @@ void SingleKeyEventManager::ProcessKeyEvent()
 
 		wasPressed = true; 
 	}
-	else if (!Keyboard::GetKeyState(key) && wasPressed)
+	else if (!Keyboard::GetKeyInputState(key) && wasPressed)
 	{	//Was Pressed but now is released
 		for (auto& it: keyReleaseCol)
 		{

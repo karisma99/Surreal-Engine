@@ -1,10 +1,13 @@
 #include "FreezeTime.h"
 #include "SurrealAttorney.h"
 #include "TimeManager.h"
-
 #include <stdio.h> 
+#include "Surreal Graphics/WindowController.h"
 
-const float FreezeTime::DEAD_TIME_THRESHOLD = 0.1f;
+using namespace std::chrono_literals;
+using std::chrono::duration_cast;
+
+const float FreezeTime::DEAD_TIME_THRESHOLD = 1.0f / 20.0f;
 const float FreezeTime::DEFAULT_FRAME_TIME = 1.0f / 60;
 
 FreezeTime::FreezeTime()
@@ -13,14 +16,17 @@ FreezeTime::FreezeTime()
 
 	freeze_mode_active = false;
 	totalFrozenTime = 0;
+	start_time = clock::now();
 }
 
 float FreezeTime::ComputeGameTime(float prev_gametime)
 {
+	
+
 	TestForFreezeKeys(); // system time may pass here if freeze mode activated
 	
 	// Adjust system time to actual game time based cumulative frozen time so far
-	float curr_gametime = SurrealAttorney::Time::GetTime() - totalFrozenTime;
+	float curr_gametime = 1e-6f * static_cast<float>(duration_cast<std::chrono::microseconds>(clock::now() - start_time).count()) - totalFrozenTime;
 
 	// Determines if any extra frozen time (freeze keys, break points, etc.) occurred since prev_gametime
 	float frametime = curr_gametime - prev_gametime;
@@ -32,7 +38,7 @@ float FreezeTime::ComputeGameTime(float prev_gametime)
 		totalFrozenTime += extraFrozenTime;	// tally frozen time total
 		curr_gametime -= extraFrozenTime;	// correct curr_gametime with the extra frozen time
 
-		DebugMsg::out("Game time frozen for %f secs (forcing frame time to %f)\n", extraFrozenTime, curr_gametime - prev_gametime);
+		Trace::out("Game time frozen for %f secs (forcing frame time to %f)\n", extraFrozenTime, curr_gametime - prev_gametime);
 	}
 
 	return curr_gametime; // New current game time
@@ -45,7 +51,7 @@ void FreezeTime::TestForFreezeKeys()
 	// we are returning after a single frame request
 	if (HackedKeyRelease(FREEZE_KEY) || freeze_mode_active)
 	{
-		DebugMsg::out("FREEZE FRAME at time %f (last frame: %f) ", TimeManager::GetTime(), TimeManager::GetFrameTime());
+		Trace::out("FREEZE FRAME at time %f (last frame: %f) \n", TimeManager::GetTime(), TimeManager::GetFrameTime());
 
 		freeze_mode_active = true;				// Freeze mode active
 		bool single_frame_requested = false;	// No single frame request yet
@@ -62,8 +68,6 @@ void FreezeTime::TestForFreezeKeys()
 			{
 				single_frame_requested = true;	// Process a single frame and freeze again
 			}
-
-			glfwPollEvents();  // We force GLFW to rescan the keyboard
 		}
 	}
 }
@@ -71,18 +75,21 @@ void FreezeTime::TestForFreezeKeys()
 // Helper function to detect a key press-and-release event
 // Very hacky: The loop waiting for a release is resource intensive.
 // Only good because we are freeze-framing the engine.
-bool FreezeTime::HackedKeyRelease(AZUL_KEY k)
+bool FreezeTime::HackedKeyRelease(SURREAL_KEY k)
 {
 	bool keyPressedAndReleased = false;
 
-	if (Keyboard::GetKeyState(k)) // Is the key pressed?
+	if (WindowController::IsKeyPressed(k)) // Is the key pressed?
 	{		
-		while (Keyboard::GetKeyState(k))	// Poll keyboard until k is released
-			glfwWaitEvents();				// loop until something happens (typically, k is released)
+		while (WindowController::IsKeyPressed(k))
+		{
+			std::this_thread::sleep_for(100ms);
 
-		keyPressedAndReleased = true;  // Key k was pressed and released.
+			keyPressedAndReleased = true;  // Key k was pressed and released.
+		}
 	}
 
 	return keyPressedAndReleased;
 }
+
 

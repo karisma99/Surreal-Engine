@@ -1,9 +1,7 @@
 #ifndef _Surreal
 #define _Surreal
 
-#include "AzulCore.h"
-
-class Surreal: public Engine
+class Surreal
 {
 	friend class SurrealAttorney;
 private:
@@ -23,30 +21,39 @@ private:
 		return *ptrInstance;
 	};
 
-	// Methods Users need to overload
-    virtual void Initialize();
-    virtual void LoadContent();
-	virtual void Update();
-    virtual void Draw();
-    virtual void UnLoadContent();
-
 	void LoadResources();
 	void GameInitialize(); 
 	void GameEnd();
 
 public:
-	static int GetHeight() { return Instance().getHeight(); }; 
-	static int GetWidth() { return Instance().getWidth(); };
-	static void SetClear(float r, float g, float b, float a) { Instance().SetClearColor(r, g, b, a); };
-	static void SetWidthHeight(int w, int h) { Instance().setWidthHeight(w, h); };
-	static void SetWindowName(const char* name) { Instance().setWindowName(name); };
-	static void Run() { Instance().run(); Delete(); };
+	static int GetHeight() { return Instance().privGetHeight(); }; 
+	static int GetWidth() { return Instance().privGetWidth(); };
+	static void SetClear(float r, float g, float b, float a) { Instance().privSetClearColor(r, g, b, a); };
+	static void SetWidthHeight(int w, int h) { Instance().privSetWidthHeight(w, h); };
+	static void SetWindowName(const char* name) { Instance().privSetWindowName(name); };
+	
+private:	
+	void privInitialize(HWND hwnd);
+	void privUpdate();
+	void privDraw();
+	void privUnLoadContent();
+
+	static void Initialize(HWND hwnd) { Instance().privInitialize(hwnd); };
+	static void Update() { Instance().privUpdate(); };
+	static void Draw() { Instance().privDraw(); };
+	static void UnLoadContent() { Instance().privUnLoadContent(); };
+
+	int privGetWidth();
+	int privGetHeight();
+	void privSetWindowName(const char* name);
+	void privSetWidthHeight(int w, int h);
+	void privSetClearColor(float r, float g, float b, float a);
+
+	void privDelete();
 	static void Delete() { Instance().privDelete(); };
 
-
-private:	
-	void privDelete();
-	static float GetTime() { return Instance().GetTimeInSeconds(); };
+	float privGetTimeInSeconds();
+	static float GetTime() { return Instance().privGetTimeInSeconds(); };
 
 };
 

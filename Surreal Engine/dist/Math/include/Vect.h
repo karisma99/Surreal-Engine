@@ -88,7 +88,7 @@ friend Matrix;
 	// anonymous union
 	union 
 	{
-		__m128	vm;
+		__m128	m;
 
 		// anonymous struct
 		struct 

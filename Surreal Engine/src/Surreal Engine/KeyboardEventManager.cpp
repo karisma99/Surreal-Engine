@@ -20,7 +20,7 @@ void KeyboardEventManager::ProcessKeys()
 	}
 }
 
-KeyboardEventManager::StorageListRef KeyboardEventManager::Register(Inputable* p, AZUL_KEY k, EventType e)
+KeyboardEventManager::StorageListRef KeyboardEventManager::Register(Inputable* p, SURREAL_KEY k, EventType e)
 {
 	StorageListRef ref = mapSKMgrs.find(k);
 	SingleKeyEventManager::InputableCollectionRef SingleRef;
@@ -29,7 +29,7 @@ KeyboardEventManager::StorageListRef KeyboardEventManager::Register(Inputable* p
 	{ 
 		SingleKeyEventManager* SKMgr = new SingleKeyEventManager(k); 
 		SingleRef = SKMgr->Register(p, e);
-		ref = mapSKMgrs.insert(mapSKMgrs.end(), std::pair<AZUL_KEY, SingleKeyEventManager*>(k, SKMgr));
+		ref = mapSKMgrs.insert(mapSKMgrs.end(), std::pair<SURREAL_KEY, SingleKeyEventManager*>(k, SKMgr));
 	}
 	else
 	{

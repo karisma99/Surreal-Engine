@@ -29,12 +29,16 @@ SpriteString::SpriteString(SpriteFont* sf, std::string s, int x, int y)
 	height = 0; 
 	width = 0;
 
+	int tempHeight = 0; 
 	for (unsigned int i = 0; i < s.length(); i++)
 	{
 		SpriteFont::Glyph* g = sf->GetGlyph(s[i]);
 		glyphs.insert(glyphs.end(), g);
-		height = (int)g->GetHeight();
+		tempHeight = (int)g->GetHeight();
 		width += (int)g->GetWidth();
+
+		if (tempHeight > height)
+			height = tempHeight;
 	}
 }
 
@@ -55,7 +59,7 @@ void SpriteString::Render()
 	{
 		SurrealSprite* s = it; 
 		s->SetPosition((float)(posX + offset), (float)posY);
-		s->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		s->RenderPartialTexture();
 		offset += s->GetWidth();
 	}
 }

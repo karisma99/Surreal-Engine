@@ -1,11 +1,12 @@
-// SpaceFrigate 
+// GodCam 
 
 #include "GodCam.h"
-#include "../Surreal Engine/Surreal.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/Drawable.h"
-#include "../Surreal Engine/Updateable.h"
-#include "../Surreal Engine/SceneManager.h"
+#include "Surreal Engine/Surreal.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/Drawable.h"
+#include "Surreal Engine/Updateable.h"
+#include "Surreal Engine/SceneManager.h"
+#include "Surreal Engine/TimeManager.h"
 #include "SceneOne.h"
 #include "SceneTwo.h"
 
@@ -27,8 +28,7 @@ GodCam::GodCam()
 void GodCam::Activate()
 {
 	pCam = new Camera(Camera::Type::PERSPECTIVE_3D);
-	pCam->setViewport(0, 0, Surreal::GetWidth(), Surreal::GetHeight());
-	pCam->setPerspective(35.0f, float(Surreal::GetWidth()) / float(Surreal::GetHeight()), 1.0f, 5000.0f);
+	pCam->SetPerspective(35.0f, float(Surreal::GetWidth()) / float(Surreal::GetHeight()), 1.0f, 5000.0f);
 
 	SceneManager::GetCurrentScene()->GetCameraManager()->SetCurrentCamera(pCam);
 
@@ -39,12 +39,12 @@ void GodCam::Activate()
 	CamPos.set(50, 50, 100.0f);
 	CamUp.set(0, 1, 0);
 	CamDir.set(0, 0, 1);
-	CamTranSpeed = 2;
-	CamRotSpeed = .002f;
+	CamTranSpeed = 300.0f;
+	CamRotSpeed = 2.0f;;
 
 	//		Second: we set the camera to its position and pointing toward the target
-	pCam->setOrientAndPosition(CamUp * CamRot, CamPos + CamDir * CamRot, CamPos);
-	pCam->updateCamera();
+	pCam->SetOrientAndPosition(CamUp * CamRot, CamPos + CamDir * CamRot, CamPos);
+	pCam->UpdateCamera();
 
 }
 
@@ -59,11 +59,11 @@ GodCam::~GodCam()
 
 void GodCam::Update()
 {
-	if (!active && Keyboard::GetKeyState(AZUL_KEY::KEY_0))
+	if (!active && Keyboard::GetKeyInputState(SURREAL_KEY::NUM_0_KEY))
 	{
 		active = true; 
 		Activate();
-		DebugMsg::out("God Cam on\n");
+		Trace::out("God Cam on\n");
 	}
 
 	if (active)
@@ -80,45 +80,45 @@ void GodCam::Draw()
 void GodCam::Movement()
 {
 	// Camera translation movement (NOTE: This time, I'm NOT using time-based values for simplicity)
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_W))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::W_KEY))
 	{
-		CamPos += Vect(0, 0, 1) * CamRot * CamTranSpeed;
-		DebugMsg::out("Pressing W\n");
+		CamPos += Vect(0, 0, CamTranSpeed * TimeManager::GetFrameTime()) * CamRot;
+		Trace::out("Pressing W\n");
 	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_S))
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::S_KEY))
 	{
-		CamPos += Vect(0, 0, 1) * CamRot * -CamTranSpeed;
-		DebugMsg::out("Pressing S\n");
-	}
-
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_A))
-	{
-		CamPos += Vect(1, 0, 0) * CamRot * CamTranSpeed;
-	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_D))
-	{
-		CamPos += Vect(1, 0, 0) * CamRot * -CamTranSpeed;
+		CamPos += Vect(0, 0, -CamTranSpeed * TimeManager::GetFrameTime()) * CamRot;
+		Trace::out("Pressing S\n");
 	}
 
-	// Camera Rotation movement (NOTE: This time, I'm NOT using time-based values for simplicity)
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_ARROW_LEFT))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::A_KEY))
 	{
-		CamRot *= Matrix(ROT_Y, CamRotSpeed);
+		CamPos += Vect(-CamTranSpeed * TimeManager::GetFrameTime(), 0, 0) * CamRot;
 	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_ARROW_RIGHT))
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::D_KEY))
 	{
-		CamRot *= Matrix(ROT_Y, -CamRotSpeed);
-	}
-
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_ARROW_UP))
-	{
-		CamRot *= Matrix(ROT_AXIS_ANGLE, Vect(1, 0, 0) * CamRot, -CamRotSpeed);
-	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_ARROW_DOWN))
-	{
-		CamRot *= Matrix(ROT_AXIS_ANGLE, Vect(1, 0, 0) * CamRot, CamRotSpeed);
+		CamPos += Vect(CamTranSpeed * TimeManager::GetFrameTime(), 0, 0) * CamRot;
 	}
 
-	pCam->setOrientAndPosition(CamUp * CamRot, CamPos + CamDir * CamRot, CamPos);
-	pCam->updateCamera();
+	// Camera Rotation movement 
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::ARROW_LEFT_KEY))
+	{
+		CamRot *= Matrix(ROT_Y, -CamRotSpeed * TimeManager::GetFrameTime());
+	}
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::ARROW_RIGHT_KEY))
+	{
+		CamRot *= Matrix(ROT_Y, CamRotSpeed * TimeManager::GetFrameTime());
+	}
+
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::ARROW_UP_KEY))
+	{
+		CamRot *= Matrix(ROT_AXIS_ANGLE, Vect(1, 0, 0) * CamRot, CamRotSpeed * TimeManager::GetFrameTime());
+	}
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::ARROW_DOWN_KEY))
+	{
+		CamRot *= Matrix(ROT_AXIS_ANGLE, Vect(1, 0, 0) * CamRot, -CamRotSpeed * TimeManager::GetFrameTime());
+	}
+
+	pCam->SetOrientAndPosition(CamUp * CamRot, CamPos + CamDir * CamRot, CamPos);
+	pCam->UpdateCamera();
 }

@@ -3,8 +3,6 @@
 #ifndef _FoodManager
 #define _FoodManager
 
-#include "AzulCore.h"
-
 class Fish;
 
 class FoodManager

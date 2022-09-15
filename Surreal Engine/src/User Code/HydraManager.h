@@ -3,7 +3,7 @@
 #ifndef _HydraManager
 #define _HydraManager
 
-#include "AzulCore.h"
+#include "Matrix.h"
 
 class Hydra;
 class Fish;

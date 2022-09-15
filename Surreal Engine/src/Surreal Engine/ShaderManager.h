@@ -4,8 +4,7 @@
 #define _ShaderManager
 
 #include <map>
-
-class ShaderObject;
+#include "Surreal Graphics/GraphicsCore.h"
 
 class ShaderManager
 {
@@ -27,21 +26,19 @@ private:
 		return *ptrInstance;
 	};
 
-	std::string DefaultPath = "Shaders/";
-	std::map<std::string, ShaderObject*> ShaderStorage; 
+	std::string DefaultPath = "../Assets/Shaders/";
+	std::map<std::string, ShaderBase*> ShaderStorage; 
 
 public:
-	static void Load(const std::string& key, const std::string& path) { Instance().privLoad(key, path); };
-	static ShaderObject* Get(const std::string key) { return Instance().privGet(key); };
+	static void Load(const std::string& key, ShaderBase* pShader) { Instance().privLoad(key, pShader); };
+	static ShaderBase* Get(const std::string key) { return Instance().privGet(key); };
 
 private:
 	static void Delete() { Instance().privDelete(); };
-	static void LoadDefaultShaders() { Instance().privLoadDefaultShaders(); };
 
-	void privLoad(const std::string& key, const std::string& path); 
-	ShaderObject* privGet(const std::string& key); 
+	void privLoad(const std::string& key, ShaderBase* pShader); 
+	ShaderBase* privGet(const std::string& key); 
 	void privDelete();
-	void privLoadDefaultShaders();
 
 };
 

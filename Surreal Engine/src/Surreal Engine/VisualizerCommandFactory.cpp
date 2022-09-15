@@ -11,11 +11,11 @@ VisualizerCommandFactory::VisualizerCommandFactory()
 
 }
 
-VisualizerCommand* VisualizerCommandFactory::privCreateCommand(Matrix m, Vect v)
+VisualizerCommand* VisualizerCommandFactory::privCreateCommand(Matrix m, Vect v, Collidable::VolumeType vol)
 {
-	VisualizerCommand* b = myCommandPool.GetCommand(m, v);
+	VisualizerCommand* b = myCommandPool.GetCommand(m, v, vol);
 
-	b->Update(m, v);
+	b->Update(m, v, vol);
 
 	return b;
 }

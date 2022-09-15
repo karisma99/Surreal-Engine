@@ -4,7 +4,7 @@
 #include "CollidableAttorney.h"
 #include "SurrealMathTools.h"
 #include "Colors.h"
-#include "CollisionVolumeBSphere.h"
+#include "CollisionVolume.h"
 #include "Visualizer.h"
 
 CollisionTestSelfCommand::CollisionTestSelfCommand(CollidableGroup* g, CollisionDispatchBase* pd)
@@ -24,24 +24,34 @@ void CollisionTestSelfCommand::Execute()
 
 	for (auto it1 = Collection1.begin(); it1 != Collection1.end(); it1++)
 	{
-		const CollisionVolumeBSphere& bs1 = (*it1)->GetBSphere();
+		const CollisionVolume& cv1 = (*it1)->GetCollisionVolume();
+		const CollisionVolumeBSphere& dv1 = (*it1)->GetDefaultVolume();
 
 		for (auto it2 = --Collection1.end(); it2 != it1; it2--)
 		{
-			const CollisionVolumeBSphere& bs2 = (*it2)->GetBSphere();
+			const CollisionVolume& cv2 = (*it2)->GetCollisionVolume();
+			const CollisionVolumeBSphere& dv2 = (*it2)->GetDefaultVolume();
 
-			if (SurrealMathTools::Intersect(bs1, bs2))
+			//Do cv1's and cv2's Bsphere intersect? 
+			if (SurrealMathTools::Intersect(dv1, dv2))
 			{
-				pDispatch->ProcessCallbacks(*it1, *it2);
+				if (SurrealMathTools::Intersect(cv1, cv2))
+				{
+					pDispatch->ProcessCallbacks(*it1, *it2);
 
-				Visualizer::ShowSphere(bs1, Color::Red);
-				Visualizer::ShowSphere(bs2, Color::Red);
+					Visualizer::ShowCollisionVolume(cv1, Color::Red);
+					Visualizer::ShowCollisionVolume(cv2, Color::Red);
+				}
+				else
+				{
+					Visualizer::ShowCollisionVolume(cv1, Color::Blue);
+					Visualizer::ShowCollisionVolume(cv2, Color::Blue);
+				}
 			}
-			else
-			{
-				Visualizer::ShowSphere(bs1, Color::Blue);
-				Visualizer::ShowSphere(bs2, Color::Blue);
-			}
+			
+			Visualizer::ShowSphere(dv2, Color::Yellow);
 		}
+
+		Visualizer::ShowSphere(dv1, Color::Yellow);
 	}
 }

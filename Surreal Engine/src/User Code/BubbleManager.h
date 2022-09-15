@@ -3,7 +3,7 @@
 #ifndef _BubbleManager
 #define _BubbleManager
 
-#include "AzulCore.h"
+#include "Matrix.h"
 
 class SurrealSprite;
 
@@ -41,7 +41,6 @@ private:
 	void privReturnBubble();
 
 	static Vect DEFAULT_COLOR;
-	GraphicsObject_WireframeConstantColor* WFUnitSphere;
 	int liveBubbles;
 	int maxBubbles = 3;
 

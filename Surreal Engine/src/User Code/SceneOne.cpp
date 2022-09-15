@@ -1,15 +1,15 @@
 //SceneDemo
 
 #include "SceneOne.h"
-#include "../User Code/World.h"
-#include "../User Code/Fish.h"
-#include "../User Code/Hydra.h"
-#include "../User Code/GodCam.h"
-#include "../User Code/BubbleManager.h"
-#include "../User Code/Bubble.h"
-#include "../User Code/Hud.h"
-#include "../User Code/HydraManager.h"
-#include "../User Code/FishManager.h"
+#include "User Code/World.h"
+#include "User Code/Fish.h"
+#include "User Code/Hydra.h"
+#include "User Code/GodCam.h"
+#include "User Code/BubbleManager.h"
+#include "User Code/Bubble.h"
+#include "User Code/Hud.h"
+#include "User Code/HydraManager.h"
+#include "User Code/FishManager.h"
 
 void SceneOne::Initialize()
 {
@@ -20,6 +20,9 @@ void SceneOne::Initialize()
 
 	HydraManager::StartHydras(pFish);
 
+	SetTerrain("GravelTerrain");
+
+	SetCollisionTerrain<Fish>();
 	SetCollisionPair<Fish, Hydra>(); 
 	SetCollisionPair<Hydra, Bubble>();
 }
@@ -32,9 +35,6 @@ void SceneOne::SceneEnd()
 
 	delete pWorld;
 	pWorld = nullptr;
-
-	delete pHydra;
-	pHydra = nullptr;
 
 	delete pFish;
 	pFish = nullptr;

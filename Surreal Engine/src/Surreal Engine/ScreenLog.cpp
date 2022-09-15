@@ -35,7 +35,7 @@ void ScreenLog::privRender()
 			SurrealSprite* sprite = font->GetGlyph(s[i]);
 			sprite->SetPosition((float)anchorX + offsetX, (float)anchorY - (sprite->GetHeight() * offsetY));
 			offsetX += (int)sprite->GetWidth();
-			sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+			sprite->Render();
 		}
 		offsetY++;
 	}

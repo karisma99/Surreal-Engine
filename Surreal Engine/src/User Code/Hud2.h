@@ -2,9 +2,8 @@
 #ifndef _Hud2
 #define _Hud2
 
-#include "../Surreal Engine/GameObject.h"
-#include "AzulCore.h"
-#include "Camera.h"
+#include "Surreal Engine/GameObject.h"
+#include "Surreal Graphics/Camera.h"
 
 class SurrealSprite;
 class SpriteFont;

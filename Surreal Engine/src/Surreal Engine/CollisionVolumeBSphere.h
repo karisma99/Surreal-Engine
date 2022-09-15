@@ -2,11 +2,13 @@
 #define _CollisionVolumeBSphere
 
 #include "Matrix.h"
-#include "Model.h"
+#include "Surreal Graphics/Model.h"
 #include "Vect.h"
 #include "CollisionVolume.h"
 
 class VisualizerCommand;
+class CollisionVolumeAABB;
+class CollisionVolumeOBB;
 
 class CollisionVolumeBSphere : public CollisionVolume, public Align16
 {
@@ -17,8 +19,11 @@ public:
 	~CollisionVolumeBSphere();
 
 	virtual void ComputeData(Model* mod, const Matrix& mat);
-	virtual bool Intersect(const CollisionVolume& other);
-	virtual bool Intersect(const CollisionVolumeBSphere& other);
+	virtual void DebugView(const Vect& col) const; 
+	virtual bool IntersectAccept(const CollisionVolume& other) const override; 
+	virtual bool IntersectVisit(const CollisionVolumeBSphere& other) const override; 
+	virtual bool IntersectVisit(const CollisionVolumeAABB& other) const override; 
+	virtual bool IntersectVisit(const CollisionVolumeOBB& other) const override;
 
 	Vect GetCenter() const; 
 	float GetRadius() const; 
@@ -33,4 +38,4 @@ private:
 
 };
 
-#endif _CollisionVolume
+#endif _CollisionVolumeBSphere

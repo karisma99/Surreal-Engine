@@ -1,7 +1,6 @@
 // Plane 
 
 #include "WorldPlane.h"
-#include "AzulCore.h"
 #include "../Surreal Engine/ModelManager.h"
 #include "../Surreal Engine/ShaderManager.h"
 #include "../Surreal Engine/TextureManager.h"
@@ -11,11 +10,12 @@
 #include "../Surreal Engine/EventType.h"
 #include "../Surreal Engine/SceneManager.h"
 #include "../User Code/SceneOne.h"
+#include "Surreal Engine/Colors.h"
 
 WorldPlane::WorldPlane()
 {
-	pGObj_Plane = new GraphicsObject_TextureFlat(ModelManager::Get("Plane"), ShaderManager::Get("Flat"), TextureManager::Get("Grid"));
-	pGObj_Axis = new GraphicsObject_ColorNoTexture(ModelManager::Get("Axis"), ShaderManager::Get("ColorNoTex"));
+	pGObj_Plane = new GraphicsObject_TextureFlat(ModelManager::Get("Plane"), TextureManager::Get("Grid"));
+	pGObj_Axis = new GraphicsObject_ColorFlat(ModelManager::Get("Axis"), Color::Blue);
 
 	// Creating matrices for in-world placement
 	Matrix world;
@@ -25,9 +25,9 @@ WorldPlane::WorldPlane()
 	pGObj_Plane->SetWorld(world);
 
 	Drawable::SubmitDrawRegistration();
-	Inputable::SubmitKeyRegistration(AZUL_KEY::KEY_SPACE, EventType::KEY_PRESS);
-	Inputable::SubmitKeyRegistration(AZUL_KEY::KEY_M, EventType::KEY_RELEASE);
-	Inputable::SubmitKeyRegistration(AZUL_KEY::KEY_1, EventType::KEY_PRESS);
+	Inputable::SubmitKeyRegistration(SURREAL_KEY::SPACE_KEY, EventType::KEY_PRESS);
+	Inputable::SubmitKeyRegistration(SURREAL_KEY::M_KEY, EventType::KEY_RELEASE);
+	Inputable::SubmitKeyRegistration(SURREAL_KEY::NUM_1_KEY, EventType::KEY_PRESS);
 }
 
 WorldPlane::~WorldPlane()
@@ -46,41 +46,41 @@ void WorldPlane::Update()
 
 void WorldPlane::Draw()
 {
-	pGObj_Plane->Render(pCam);
-	pGObj_Axis->Render(pCam);
+	pGObj_Plane->Render();
+	pGObj_Axis->Render();
 }
 
-void WorldPlane::KeyPressed(AZUL_KEY k)
+void WorldPlane::KeyPressed(SURREAL_KEY k)
 {
 	switch (k)
 	{
-	case AZUL_KEY::KEY_SPACE:
-		DebugMsg::out("SPACE pressed\n"); 
+	case SURREAL_KEY::SPACE_KEY:
+		Trace::out("SPACE pressed\n"); 
 		break; 
-	case AZUL_KEY::KEY_M:
-		DebugMsg::out("M pressed\n");
+	case SURREAL_KEY::M_KEY:
+		Trace::out("M pressed\n");
 		break;
-	case AZUL_KEY::KEY_1:
-		DebugMsg::out("1 pressed\n");
+	case SURREAL_KEY::NUM_1_KEY:
+		Trace::out("1 pressed\n");
 		SceneManager::SetNextScene(new SceneOne());
 		break;
 	default:
-		DebugMsg::out("ERROR: Key %i unproccesed\n", k); 
+		Trace::out("ERROR: Key %i unproccesed\n", k); 
 	}
 }
 
-void WorldPlane::KeyReleased(AZUL_KEY k)
+void WorldPlane::KeyReleased(SURREAL_KEY k)
 {
 	switch (k)
 	{
-	case AZUL_KEY::KEY_SPACE:
-		DebugMsg::out("SPACE Released\n");
+	case SURREAL_KEY::SPACE_KEY:
+		Trace::out("SPACE Released\n");
 		break;
-	case AZUL_KEY::KEY_M:
-		DebugMsg::out("M Released\n");
+	case SURREAL_KEY::M_KEY:
+		Trace::out("M Released\n");
 		break;
 	default:
-		DebugMsg::out("ERROR: Key %i unproccesed\n", k);
+		Trace::out("ERROR: Key %i unproccesed\n", k);
 	}
 }
 

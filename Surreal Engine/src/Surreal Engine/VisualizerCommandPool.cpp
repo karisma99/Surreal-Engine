@@ -9,47 +9,38 @@ VisualizerCommandPool::VisualizerCommandPool()
 
 VisualizerCommandPool::~VisualizerCommandPool()
 {
-	DebugMsg::out("Deleting Bullets\n");
+	Trace::out("Deleting Commands\n");
 
-	while (!activeItems.empty())
+	while (!createdItems.empty())
 	{
-		delete activeItems.front();
-		activeItems.pop();
-	}
-
-	while (!recycledItems.empty())
-	{
-		delete recycledItems.top();
-		recycledItems.pop();
+		delete createdItems.front();
+		createdItems.pop();
 	}
 }
 
-VisualizerCommand* VisualizerCommandPool::GetCommand(Matrix m, Vect v)
+VisualizerCommand* VisualizerCommandPool::GetCommand(Matrix m, Vect v, Collidable::VolumeType vol)
 {
 	VisualizerCommand* b;
 
 	if (recycledItems.empty())
 	{
-		DebugMsg::out("New Command\n");
-		b = new VisualizerCommand(m, v);
+		Trace::out("New Command\n");
+		b = new VisualizerCommand(m, v, vol);
+		createdItems.push(b);
 	}
 	else
 	{
-		DebugMsg::out("Recycled Command\n");
+		Trace::out("Recycled Command\n");
 
 		b = recycledItems.top();
 		recycledItems.pop();
 	}
 
-	activeItems.push(b);
 	return b;
 }
 
 void VisualizerCommandPool::ReturnCommand(VisualizerCommand* b)
 {
-	activeItems.pop();
-
 	recycledItems.push(static_cast<VisualizerCommand*>(b));
-	DebugMsg::out("Recycled Command\n");
-
+	Trace::out("Recycled Command\n");
 }

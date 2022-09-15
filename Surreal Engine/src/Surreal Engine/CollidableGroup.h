@@ -5,27 +5,30 @@
 
 class Collidable; 
 class CollidableManager;
+class CollisionVolumeAABB;
 
 class CollidableGroup
 {
 public:
 	using CollidableCollection = std::list<Collidable*>;
 
-	CollidableGroup() = default;
+	CollidableGroup();
 	CollidableGroup(const CollidableGroup& c) = delete;
 	CollidableGroup& operator = (const CollidableGroup& t) = delete;
-	virtual ~CollidableGroup() = default;
+	~CollidableGroup();
 
 	using CollidableCollectionRef = CollidableCollection::iterator;
 
 	void Register(Collidable* c, CollidableCollectionRef& ref);
 	void Deregister(const CollidableCollectionRef& ref);
 	const CollidableCollection& GetColliderCollection();
-
+	void CalculateAABB();
+	CollisionVolumeAABB& GetGroupAABB();
 
 
 private: 
 	CollidableCollection CollideCol;
+	CollisionVolumeAABB* pGroupAABB;
 
 };
 

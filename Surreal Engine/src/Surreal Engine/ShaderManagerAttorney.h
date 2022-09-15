@@ -11,7 +11,6 @@ class ShaderManagerAttorney
 
 private:
 	static void Delete() { ShaderManager::Delete(); }
-	static void LoadDefaultShaders() { ShaderManager::LoadDefaultShaders(); }
 };
 
 #endif _ShaderManagerAttorney

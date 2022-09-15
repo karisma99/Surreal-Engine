@@ -2,6 +2,17 @@
 
 #include "CollidableGroup.h"
 #include "SceneAttorney.h"
+#include "CollisionVolumeAABB.h"
+
+CollidableGroup::CollidableGroup()
+{
+	pGroupAABB = new CollisionVolumeAABB();
+}
+
+CollidableGroup::~CollidableGroup()
+{
+	delete pGroupAABB;
+}
 
 void CollidableGroup::Register(Collidable* col, CollidableCollectionRef& ref)
 {
@@ -16,4 +27,14 @@ void CollidableGroup::Deregister(const CollidableCollectionRef& ref)
 const CollidableGroup::CollidableCollection& CollidableGroup::GetColliderCollection()
 {
 	return this->CollideCol;
+}
+
+void CollidableGroup::CalculateAABB()
+{
+	pGroupAABB->ComputeData(this->CollideCol);
+}
+
+CollisionVolumeAABB& CollidableGroup::GetGroupAABB()
+{
+	return *this->pGroupAABB;
 }

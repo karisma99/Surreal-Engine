@@ -1,29 +1,28 @@
 // Hydra 
 
 #include "Hydra.h"
-#include "../Surreal Engine/ModelManager.h"
-#include "../Surreal Engine/ShaderManager.h"
-#include "../Surreal Engine/TextureManager.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/Drawable.h"
-#include "../Surreal Engine/Updateable.h"
-#include "../Surreal Engine/Alarmable.h"
-#include "../Surreal Engine/Inputable.h"
-#include "../Surreal Engine/Collidable.h"
-#include "../Surreal Engine/SceneManager.h"
-#include "../User Code/Fish.h"
-#include "../User Code/HydraManager.h"
-#include "../User Code/HydraFactory.h"
+#include "Surreal Engine/ModelManager.h"
+#include "Surreal Engine/ShaderManager.h"
+#include "Surreal Engine/TextureManager.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/Drawable.h"
+#include "Surreal Engine/Updateable.h"
+#include "Surreal Engine/Alarmable.h"
+#include "Surreal Engine/Inputable.h"
+#include "Surreal Engine/Collidable.h"
+#include "Surreal Engine/SceneManager.h"
+#include "User Code/Fish.h"
+#include "User Code/HydraManager.h"
+#include "User Code/HydraFactory.h"
+#include "Surreal Engine/Colors.h"
+#include "Surreal Engine/TimeManager.h"
+#include "Surreal Engine/TerrainObject.h"
 
 Hydra::Hydra()
 {
-	// Light
-	Vect LightColor(1.50f, 1.50f, 1.50f, 1.0f);
-	Vect LightPos(1.0f, 1.0f, 1.0f, 1.0f);
-	pGObj_SpaceFrigateLight = new GraphicsObject_TextureLight(ModelManager::Get("Hydra"), ShaderManager::Get("Light"), TextureManager::Get("HydraColor"), LightColor, LightPos);
+	pGObj_SpaceFrigateLight = new GraphicsObject_TextureFlat(ModelManager::Get("Hydra"), TextureManager::Get("HydraColor"));
 
-	Vect Blue(0.0f, 0.0f, 1.0f, 1.0f);
-	pGObj_SpaceshipBSphere = new GraphicsObject_WireframeConstantColor(ModelManager::Get("Sphere"), ShaderManager::Get("ConstantColor"), Blue);
+	pGObj_SpaceshipBSphere = new GraphicsObject_ColorFlat(ModelManager::Get("Sphere"), Color::Blue);
 
 	// Spaceship
 	HydraScale.set(SCALE, 5.0f, 20.0f, 5.0f);
@@ -37,8 +36,8 @@ Hydra::Hydra()
 	CamShipOffset.set(0, 50, -150);
 	CamLookAt.set(0, 10, 100);
 
-	this->SetColliderModel(pGObj_SpaceFrigateLight->getModel());
 	Collidable::SetCollidableGroup<Hydra>();
+	this->SetColliderModel(pGObj_SpaceFrigateLight->GetModel(), BSPHERE);
 }
 
 Hydra::~Hydra()
@@ -60,28 +59,32 @@ void Hydra::Initialize(Matrix m)
 
 void Hydra::Update()
 {
-	HydraRotTrans = Matrix(TRANS, Vect(HydraSpeed, 0, 0)) * HydraRotTrans;
-	Matrix world = HydraScale * HydraRotTrans;
+	HydraRotTrans = Matrix(TRANS, Vect(HydraSpeed * TimeManager::GetFrameTime(), 0, 0)) * HydraRotTrans;
+
+	float offset = 70;
+	Vect terrainCellCenter = SceneManager::GetCurrentScene()->GetTerrain()->GetCellCenterAtPosition(Vect(HydraRotTrans.M12(), HydraRotTrans.M13(), HydraRotTrans.M14()));
+
+	Matrix world = HydraScale * HydraRotTrans * Matrix(TRANS, 0, terrainCellCenter.Y() - offset, 0);
 	pGObj_SpaceFrigateLight->SetWorld(world);
 	this->UpdateCollisionData(world);
 }
 
 void Hydra::Draw()
 {
-	pGObj_SpaceFrigateLight->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera());
+	pGObj_SpaceFrigateLight->Render();
 }
 
 void Hydra::Collision(Fish* sf)
 {
 	sf;
-	DebugMsg::out("Hydra Collide Fish\n");
+	Trace::out("Hydra Collide Fish\n");
 	Destroy();
 }
 
 void Hydra::Collision(Bubble* sf)
 {
 	sf;
-	DebugMsg::out("Hydra Collide Bubble\n");
+	Trace::out("Hydra Collide Bubble\n");
 	Destroy();
 }
 

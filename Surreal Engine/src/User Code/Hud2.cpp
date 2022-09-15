@@ -86,34 +86,34 @@ void Hud2::Draw2D()
 
 	if (FishManager::GetHeartCount() >= 3)
 	{
-		pLife1Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
-		pLife2Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
-		pLife3Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		pLife1Sprite->Render();
+		pLife2Sprite->Render();
+		pLife3Sprite->Render();
 	}
 	else if (FishManager::GetHeartCount() == 2)
 	{
-		pLife1Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
-		pLife2Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		pLife1Sprite->Render();
+		pLife2Sprite->Render();
 	}
 	else if (FishManager::GetHeartCount() == 1)
 	{
-		pLife1Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		pLife1Sprite->Render();
 	}
 
 	if (FoodManager::GetGoodEatenCount() >= 3)
 	{
-		pCherry1Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
-		pCherry2Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
-		pCherry3Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		pCherry1Sprite->Render();
+		pCherry2Sprite->Render();
+		pCherry3Sprite->Render();
 	}
 	else if (FoodManager::GetGoodEatenCount() == 2)
 	{
-		pCherry1Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
-		pCherry2Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		pCherry1Sprite->Render();
+		pCherry2Sprite->Render();
 	}
 	else if (FoodManager::GetGoodEatenCount() == 1)
 	{
-		pCherry1Sprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+		pCherry1Sprite->Render();
 	}
 
 }

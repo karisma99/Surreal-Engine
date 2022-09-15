@@ -4,9 +4,9 @@
 #define _SceneAttorney
 
 #include "Scene.h"
-#include "AzulCore.h"
 #include "EventType.h"
 #include "SceneManager.h"
+#include "Keyboard.h"
 
 class SceneAttorney
 {
@@ -78,7 +78,7 @@ public:
 	{
 		friend class Inputable;
 	private:
-		static void Register(Scene* s, Inputable* p, AZUL_KEY k, EventType e, 
+		static void Register(Scene* s, Inputable* p, SURREAL_KEY k, EventType e,
 			KeyboardEventManager::StorageListRef KBref, SingleKeyEventManager::InputableCollectionRef Sref) {
 			s->Register(p, k, e, KBref, Sref);
 		}

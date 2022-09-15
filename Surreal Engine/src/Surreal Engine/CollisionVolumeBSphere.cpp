@@ -1,12 +1,14 @@
 //CollisionVolumeBSphere
 
 #include "CollisionVolumeBSphere.h"
+#include "Visualizer.h"
 #include "VisualizerCommand.h"
 #include "VisualizerCommandFactory.h"
+#include "SurrealMathTools.h"
 
 CollisionVolumeBSphere::CollisionVolumeBSphere()
 {
-	this->pCommand = VisualizerCommandFactory::CreateCommand(matrix, center);
+	this->pCommand = VisualizerCommandFactory::CreateCommand(matrix, center, Collidable::VolumeType::BSPHERE);
 	this->radius = 0.0f; 
 	this->center = Vect(0, 0, 0);
 }
@@ -18,21 +20,34 @@ CollisionVolumeBSphere::~CollisionVolumeBSphere()
 
 void CollisionVolumeBSphere::ComputeData(Model* mod, const Matrix& mat)
 {
-	this->center = mod->getCenter() * mat; 
-	this->radius = mod->getRadius() * mat.get(MatrixRowType::ROW_0).mag();
+	this->center = mod->GetCenter() * mat; 
+	this->radius = mod->GetRadius() * mat.get(MatrixRowType::ROW_0).mag();
 	this->matrix = mat;
 }
 
-bool CollisionVolumeBSphere::Intersect(const CollisionVolume& other)
+bool CollisionVolumeBSphere::IntersectAccept(const CollisionVolume& other) const
 {
-	other;
-	return false;
+	return other.IntersectVisit(*this);
 }
 
-bool CollisionVolumeBSphere::Intersect(const CollisionVolumeBSphere& other)
+bool CollisionVolumeBSphere::IntersectVisit(const CollisionVolumeBSphere& other) const
 {
-	Vect temp(this->GetCenter() - other.GetCenter());
-	return (temp.mag() < (this->GetRadius() + other.GetRadius()));
+	return SurrealMathTools::Intersect(*this, other);
+}
+
+bool CollisionVolumeBSphere::IntersectVisit(const CollisionVolumeAABB& other) const
+{
+	return SurrealMathTools::Intersect(*this, other);
+}
+
+bool CollisionVolumeBSphere::IntersectVisit(const CollisionVolumeOBB& other) const
+{
+	return SurrealMathTools::Intersect(*this, other);
+}
+
+void CollisionVolumeBSphere::DebugView(const Vect& col) const
+{
+	Visualizer::ShowSphere(*this, col);
 }
 
 Vect CollisionVolumeBSphere::GetCenter() const
@@ -47,6 +62,6 @@ float CollisionVolumeBSphere::GetRadius() const
 
 VisualizerCommand* CollisionVolumeBSphere::GetCommand(Matrix m, Vect c) const
 {
-	this->pCommand->Update(m, c);
+	this->pCommand->Update(m, c, Collidable::VolumeType::BSPHERE);
 	return this->pCommand;
 }

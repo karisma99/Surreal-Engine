@@ -22,6 +22,7 @@ public:
 
 	private:
 		static void RenderSphere(Matrix m, Vect c) { Visualizer::RenderSphere(m, c); }
+		static void RenderBox(Matrix m, Vect c) { Visualizer::RenderBox(m, c); }
 	};
 };
 

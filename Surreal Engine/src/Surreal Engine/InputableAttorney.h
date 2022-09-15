@@ -13,8 +13,8 @@ public:
 		friend class SingleKeyEventManager;
 
 	private:
-		static void KeyPressed(Inputable* p, AZUL_KEY k) { p->KeyPressed(k); }
-		static void KeyReleased(Inputable* p, AZUL_KEY k) { p->KeyReleased(k); }
+		static void KeyPressed(Inputable* p, SURREAL_KEY k) { p->KeyPressed(k); }
+		static void KeyReleased(Inputable* p, SURREAL_KEY k) { p->KeyReleased(k); }
 	};
 
 public:
@@ -24,8 +24,8 @@ public:
 		friend class InputDeregistrationCommand;
 
 	private:
-		static void SceneRegistration(Inputable* p, AZUL_KEY k, EventType e) { p->InputRegistration(k, e); }
-		static void SceneDeregistration(Inputable* p, AZUL_KEY k, EventType e) { p->InputDegregistration(k, e); }
+		static void SceneRegistration(Inputable* p, SURREAL_KEY k, EventType e) { p->InputRegistration(k, e); }
+		static void SceneDeregistration(Inputable* p, SURREAL_KEY k, EventType e) { p->InputDegregistration(k, e); }
 	};
 
 public:
@@ -33,7 +33,7 @@ public:
 	{
 		friend class Scene;
 	private:
-		static void SetKBDeleteRef(Inputable* p, AZUL_KEY k, EventType e, KeyboardEventManager::StorageListRef ref) { p->SetKeyboardDeleteRef(k, e, ref); }
+		static void SetKBDeleteRef(Inputable* p, SURREAL_KEY k, EventType e, KeyboardEventManager::StorageListRef ref) { p->SetKeyboardDeleteRef(k, e, ref); }
 	};
 
 public:
@@ -41,7 +41,7 @@ public:
 	{
 		friend class KeyboardEventManager;
 	private:
-		static void SetSDeleteRef(Inputable* p, AZUL_KEY k, EventType e, SingleKeyEventManager::InputableCollectionRef ref) { p->SetSingleDeleteRef(k, e, ref); }
+		static void SetSDeleteRef(Inputable* p, SURREAL_KEY k, EventType e, SingleKeyEventManager::InputableCollectionRef ref) { p->SetSingleDeleteRef(k, e, ref); }
 	};
 };
 

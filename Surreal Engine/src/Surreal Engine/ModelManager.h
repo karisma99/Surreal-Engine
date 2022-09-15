@@ -4,9 +4,7 @@
 #define _ModelManager
 
 #include <Map>
-#include "Model.h"
-
-class Model;
+#include "Surreal Graphics/GraphicsCore.h"
 
 class ModelManager
 {
@@ -28,7 +26,7 @@ private:
 		return *ptrInstance;
 	};
 
-	std::string DefaultPath = "Models/";
+	std::string DefaultPath = "../Assets/Models/";
 	std::map<std::string, Model*> ModelStorage;
 
 public:

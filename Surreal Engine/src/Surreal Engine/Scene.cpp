@@ -5,6 +5,8 @@
 #include "DrawableAttorney.h"
 #include "UpdateableAttorney.h"
 #include "InputableAttorney.h"
+#include "TerrainObjectManager.h"
+#include "TerrainObject.h"
 
 Scene::Scene()
 {
@@ -16,6 +18,7 @@ Scene::Scene()
 	pRegistrationBroker = new SceneRegistrationBroker();
 
 	CameraMgr = new CameraManager();
+	pTerrain = nullptr;
 }
 
 Scene::~Scene()
@@ -100,7 +103,7 @@ void Scene::Deregister(AlarmableManager::StorageListRef ref)
 	AlarmMgr->Deregister(ref);
 }
 
-void Scene::Register(Inputable* up, AZUL_KEY k, EventType e,
+void Scene::Register(Inputable* up, SURREAL_KEY k, EventType e,
 	KeyboardEventManager::StorageListRef KBref, SingleKeyEventManager::InputableCollectionRef Sref)
 {
 	KeyboardEventManager::StorageListRef r = InputMgr->Register(up, k, e);
@@ -120,6 +123,17 @@ void Scene::SubmittCommand(CommandBase* cmd)
 CameraManager* Scene::GetCameraManager()
 {
 	return CameraMgr;
+}
+
+void Scene::SetTerrain(std::string key)
+{
+	pTerrain = TerrainObjectManager::Get(key);
+	pTerrain->SubmitDrawRegistration();
+}
+
+TerrainObject* Scene::GetTerrain()
+{
+	return pTerrain;
 }
 
 

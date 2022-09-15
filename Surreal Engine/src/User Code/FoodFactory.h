@@ -3,8 +3,8 @@
 #ifndef _FoodFactory
 #define _FoodFactory
 
-#include "AzulCore.h"
 #include "FoodPool.h"
+#include "Matrix.h"
 
 class GameObject;
 

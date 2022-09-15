@@ -3,7 +3,6 @@
 
 #include "CommandBase.h"
 #include "Inputable.h"
-#include "AzulCore.h"
 #include "EventType.h"
 
 class Inputable;
@@ -13,7 +12,7 @@ class InputRegistrationCommand : public CommandBase
 {
 public:
 	InputRegistrationCommand() = default;
-	InputRegistrationCommand(Inputable* up, AZUL_KEY k, EventType e);
+	InputRegistrationCommand(Inputable* up, SURREAL_KEY k, EventType e);
 	InputRegistrationCommand(const InputRegistrationCommand& c) = delete;
 	InputRegistrationCommand& operator = (const InputRegistrationCommand& t) = delete;
 	~InputRegistrationCommand() = default;
@@ -23,7 +22,7 @@ public:
 private:
 
 	Inputable* pInput;
-	AZUL_KEY key;
+	SURREAL_KEY key;
 	EventType eventType;
 
 };

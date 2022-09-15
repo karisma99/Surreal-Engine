@@ -2,18 +2,19 @@
 
 #include "Food.h"
 #include "BubbleFactory.h"
-#include "../Surreal Engine/Updateable.h"
-#include "../Surreal Engine/Drawable.h"
-#include "../Surreal Engine/Alarmable.h"
-#include "../Surreal Engine/Collidable.h"
-#include "../Surreal Engine/SceneManager.h"
-#include "../Surreal Engine/ModelManager.h"
-#include "../Surreal Engine/ShaderManager.h"
-#include "../Surreal Engine/TextureManager.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/SurrealSprite.h"
-#include "../User Code/FoodFactory.h"
-#include "../User Code/FoodManager.h"
+#include "Surreal Engine/Updateable.h"
+#include "Surreal Engine/Drawable.h"
+#include "Surreal Engine/Alarmable.h"
+#include "Surreal Engine/Collidable.h"
+#include "Surreal Engine/SceneManager.h"
+#include "Surreal Engine/ModelManager.h"
+#include "Surreal Engine/ShaderManager.h"
+#include "Surreal Engine/TextureManager.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/SurrealSprite.h"
+#include "User Code/FoodFactory.h"
+#include "User Code/FoodManager.h"
+#include "Surreal Engine/Colors.h"
 
 
 Food::Food()
@@ -22,9 +23,9 @@ Food::Food()
 	Scale.set(SCALE, 5.0f, 5.0f, 5.0f);
 
 	Vect Blue(0.0f, 0.0f, 1.0f, 1.0f);
-	pGObj_BubbleSphere = new GraphicsObject_ColorNoTexture(ModelManager::Get("Sphere"), ShaderManager::Get("ColorNoTex"));
+	pGObj_BubbleSphere = new GraphicsObject_ColorFlat(ModelManager::Get("Sphere"), Color::Red);
 	Collidable::SetCollidableGroup<Food>();
-	this->SetColliderModel(pGObj_BubbleSphere->getModel());
+	this->SetColliderModel(pGObj_BubbleSphere->GetModel(), BSPHERE);
 }
 
 Food::~Food()
@@ -52,7 +53,7 @@ void Food::Update()
 
 void Food::Draw()
 {
-	pGObj_BubbleSphere->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera());
+	pGObj_BubbleSphere->Render();
 }
 
 void Food::Destroy()
@@ -63,7 +64,7 @@ void Food::Destroy()
 void Food::Collision(Fish* sf)
 {
 	sf;
-	DebugMsg::out("Bubble Collide Hydra\n");
+	Trace::out("Food Collide Fish\n");
 	FoodManager::EatFood();
 	Alarmable::SubmitAlarmDeregistration(AlarmableManager::Alarm0);
 	Destroy();
@@ -74,7 +75,7 @@ void Food::SceneEntry()
 	Updateable::SubmitUpdateRegistration();
 	Drawable::SubmitDrawRegistration();
 	Collidable::SubmitCollisionRegistration();
-	Alarmable::SubmitAlarmRegistration(AlarmableManager::Alarm0, 2.0f);
+	Alarmable::SubmitAlarmRegistration(AlarmableManager::Alarm0, 4.0f);
 }
 
 void Food::SceneExit()

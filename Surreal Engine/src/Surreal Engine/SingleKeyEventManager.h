@@ -2,8 +2,8 @@
 #define _SingleKeyEventManager
 
 #include <list>
-#include "AzulCore.h"
 #include "EventType.h"
+#include "Keyboard.h"
 
 class Inputable;
 
@@ -14,7 +14,7 @@ private:
 	InputableCollection keyPressCol;
 	InputableCollection keyReleaseCol;
 
-	AZUL_KEY key;
+	SURREAL_KEY key;
 
 	bool wasPressed = false;
 
@@ -22,7 +22,7 @@ public:
 	using InputableCollectionRef = InputableCollection::iterator;
 
 	SingleKeyEventManager() = default;
-	SingleKeyEventManager(AZUL_KEY k);
+	SingleKeyEventManager(SURREAL_KEY k);
 	SingleKeyEventManager(const SingleKeyEventManager& c) = delete;
 	SingleKeyEventManager& operator = (const SingleKeyEventManager& t) = delete;
 	~SingleKeyEventManager() = default;

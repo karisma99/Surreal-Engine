@@ -3,7 +3,7 @@
 #ifndef _ImageManager
 #define _ImageManager
 
-#include "Image.h"
+#include "Surreal Graphics/Image.h"
 #include <map>
 
 class Image;
@@ -29,7 +29,6 @@ private:
 		return *ptrInstance;
 	};
 
-	std::string DefaultPath = "Images/";
 	std::map<std::string, Image*> StorageMap;
 
 public:

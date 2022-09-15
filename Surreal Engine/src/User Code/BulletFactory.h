@@ -3,7 +3,7 @@
 #ifndef _BulletFactory
 #define _BulletFactory
 
-#include "AzulCore.h"
+#include "Matrix.h"
 #include "BulletPool.h"
 
 class GameObject;

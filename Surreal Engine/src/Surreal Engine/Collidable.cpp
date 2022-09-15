@@ -5,6 +5,9 @@
 #include "SceneAttorney.h"
 #include "CollisionRegistrationCommand.h"
 #include "CollisionderegistrationCommand.h"
+#include "CollisionVolumeBSphere.h"
+#include "CollisionVolumeAABB.h"
+#include "CollisionVolumeOBB.h"
 
 Collidable::Collidable()
 {
@@ -12,11 +15,19 @@ Collidable::Collidable()
 	pRegisterCmd = new CollisionRegistrationCommand(this);
 	pDeregisterCmd = new CollisionDeregistrationCommand(this);
 	pModel = nullptr;
+	ColVolume = nullptr;
+	DefaultBSphere = nullptr;
 	myID = -1;
 }
 
 Collidable::~Collidable()
 {
+	delete ColVolume; 
+	ColVolume = nullptr;
+
+	delete DefaultBSphere;
+	DefaultBSphere = nullptr;
+
 	delete pRegisterCmd; 
 	pRegisterCmd = nullptr; 
 
@@ -45,9 +56,14 @@ void Collidable::SubmitCollisionRegistration()
 	CurrState = RegistrationState::PENDING_REGISTRATION;
 }
 
-const CollisionVolumeBSphere& Collidable::GetBSphere()
+const CollisionVolume& Collidable::GetCollisionVolume()
 {
-	return BSphere;
+	return *ColVolume;
+}
+
+const CollisionVolumeBSphere& Collidable::GetDefaultVolume()
+{
+	return *DefaultBSphere;
 }
 
 void Collidable::SubmitCollisionDeregistration()
@@ -59,10 +75,22 @@ void Collidable::SubmitCollisionDeregistration()
 
 void Collidable::UpdateCollisionData(const Matrix& mat)
 {
-	BSphere.ComputeData(pModel, mat);
+	ColVolume->ComputeData(pModel, mat);
+	DefaultBSphere->ComputeData(pModel, mat);
 }
 
-void Collidable::SetColliderModel(Model* const mod)
+void Collidable::SetColliderModel(Model* const mod, VolumeType vol)
 {
+	assert(mod != nullptr);
+
 	pModel = mod;
+
+	if (vol == VolumeType::BSPHERE)
+		ColVolume = new CollisionVolumeBSphere();
+	else if (vol == VolumeType::AABB)
+		ColVolume = new CollisionVolumeAABB();
+	else if (vol == VolumeType::OBB)
+		ColVolume = new CollisionVolumeOBB(mod);
+
+	DefaultBSphere = new CollisionVolumeBSphere();
 }

@@ -40,5 +40,5 @@ void HudTest::Update()
 
 void HudTest::Draw2D()
 {
-	pLifeSprite->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrent2DCamera());
+	pLifeSprite->Render();
 }

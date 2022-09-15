@@ -4,8 +4,7 @@
 #define _TextureManager
 
 #include <map>
-
-class Texture;
+#include "Surreal Graphics/GraphicsCore.h"
 
 class TextureManager
 {
@@ -27,19 +26,19 @@ private:
 		return *ptrInstance;
 	};
 
-	std::string DefaultPath = "Textures/";
+	const std::string DefaultPath = "../Assets/Textures/";
 	std::map<std::string, Texture*> TextureStorage;
 
 public:
 	static void Load(const std::string& key, const std::string& path) { Instance().privLoad(key, path); };
-	static void Load(const std::string& key, const unsigned char& red, const unsigned char& green, const unsigned char& blue, const unsigned char alpha = 255U) { Instance().privLoad(key, red, green, blue, alpha); };
+	//static void Load(const std::string& key, const unsigned char& red, const unsigned char& green, const unsigned char& blue, const unsigned char alpha = 255U) { Instance().privLoad(key, red, green, blue, alpha); };
 	static Texture* Get(const std::string key) { return Instance().privGet(key); };
 
 private:
 	static void Delete() { Instance().privDelete(); };
 
 	void privLoad(const std::string& key, const std::string& path);
-	void privLoad(const std::string& key, const unsigned char& red, const unsigned char& green, const unsigned char& blue, const unsigned char alpha);
+	//void privLoad(const std::string& key, const unsigned char& red, const unsigned char& green, const unsigned char& blue, const unsigned char alpha);
 	Texture* privGet(const std::string& key);
 	void privDelete();
 

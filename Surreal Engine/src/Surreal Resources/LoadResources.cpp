@@ -1,13 +1,14 @@
-#include "../Surreal Engine/Surreal.h"
-#include "../Surreal Engine/TextureManager.h"
-#include "../Surreal Engine/ShaderManager.h"
-#include "../Surreal Engine/ModelManager.h"
-#include "../Surreal Engine/SceneManager.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/ImageManager.h"
-#include "../Surreal Engine/SpriteFontManager.h"
-#include "../User Code/SceneDemo.h"
-#include "../User Code/SceneOne.h"
+#include "Surreal Engine/Surreal.h"
+#include "Surreal Engine/TextureManager.h"
+#include "Surreal Engine/ShaderManager.h"
+#include "Surreal Engine/ModelManager.h"
+#include "Surreal Engine/SceneManager.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/ImageManager.h"
+#include "Surreal Engine/SpriteFontManager.h"
+#include "User Code/SceneDemo.h"
+#include "User Code/SceneOne.h"
+#include "Surreal Engine/TerrainObjectManager.h"
 
 void Surreal::LoadResources()
 {
@@ -20,6 +21,8 @@ void Surreal::LoadResources()
 	ModelManager::Load("Plane", "Plane.azul");
 	ModelManager::Load("SpaceFrigate", "space_frigate.azul");
 	ModelManager::Load("Sphere", Model::PreMadeModels::UnitSphere);
+	ModelManager::Load("UnitSquare", Model::PreMadeModels::UnitSquare2D);
+	ModelManager::Load("UnitBox", Model::PreMadeModels::UnitBox);
 
 	ModelManager::Load("Fish", "fish.azul");
 	ModelManager::Load("Fish1", "fish1.azul");
@@ -39,7 +42,6 @@ void Surreal::LoadResources()
 	ModelManager::Load("Fish15", "fish15.azul");
 	ModelManager::Load("Fish16", "fish16.azul");
 	ModelManager::Load("Hydra", "Hydra.azul");
-	ModelManager::Load("UnitSquare", Model::PreMadeModels::UnitSquareXY);
 
 	//---------------------------------------------------------------------------------------------------------
 	// Load the Textures
@@ -56,15 +58,16 @@ void Surreal::LoadResources()
 	TextureManager::Load("Cherry", "food.tga");
 	TextureManager::Load("skybox", "skybox.tga");
 	TextureManager::Load("heaven", "heavenSkybox.tga");
+	TextureManager::Load("Gravel", "Gravel.tga");
 
 	//---------------------------------------------------------------------------------------------------------
 	// Load the Shaders
 	//---------------------------------------------------------------------------------------------------------
 
-	ShaderManager::Load("Flat", "textureFlatRender");
-	ShaderManager::Load("Light", "textureLightRender");
-	ShaderManager::Load("ConstantColor", "colorConstantRender");
-	ShaderManager::Load("ColorNoTex", "colorNoTextureRender");
+	ShaderManager::Load("textureFlat", new ShaderTexture());
+	ShaderManager::Load("textureLight", new ShaderTextureLight());
+	ShaderManager::Load("colorFlat", new ShaderColor());
+	ShaderManager::Load("colorLight", new ShaderColorLight());
 
 	//---------------------------------------------------------------------------------------------------------
 	// Load the Images
@@ -76,8 +79,13 @@ void Surreal::LoadResources()
 	//---------------------------------------------------------------------------------------------------------
 	// Load the Fonts
 	//---------------------------------------------------------------------------------------------------------
-	SpriteFontManager::Load("Font1", "Metrics");
+	SpriteFontManager::Load("Font1", "Stencil60");
 
+
+	//---------------------------------------------------------------------------------------------------------
+	// Load the Terrains
+	//---------------------------------------------------------------------------------------------------------
+	TerrainObjectManager::Load("GravelTerrain", "HMtest.tga", "Gravel", 100, 100.0f, 50.0f, 20, 20);
 
 	//---------------------------------------------------------------------------------------------------------
 	// Load Scene

@@ -1,4 +1,4 @@
-// CameraManager.h
+// TimeManager.h
 
 #ifndef _TimeManager
 #define _TimeManager

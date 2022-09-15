@@ -1,4 +1,4 @@
-//Visualizer
+//BubbleManager
 
 #include "BubbleManager.h"
 #include "BubbleFactory.h"

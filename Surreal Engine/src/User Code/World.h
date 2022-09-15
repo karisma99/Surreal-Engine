@@ -5,8 +5,8 @@
 #include "../Surreal Engine/GameObject.h"
 
 class GraphicsObject_TextureFlat;
-class GraphicsObject_ColorNoTexture;
 class Model;
+class Skybox;
 
 class World : public GameObject
 {
@@ -18,14 +18,14 @@ public:
 
 	virtual void Update();
 	virtual void Draw();
-	virtual void KeyPressed(AZUL_KEY k);
-	virtual void KeyReleased(AZUL_KEY k);
+	virtual void KeyPressed(SURREAL_KEY k);
+	virtual void KeyReleased(SURREAL_KEY k);
 
 private:
 	void CreateSkybox(float scale);
 
 	GraphicsObject_TextureFlat* pGObj_Skybox;
-	Model* pSkyboxModel;
+	Skybox* pSkybox;
 };
 
 #endif _World

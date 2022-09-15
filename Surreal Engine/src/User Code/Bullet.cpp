@@ -19,7 +19,7 @@ Bullet::Bullet()
 	Scale.set(SCALE, 3.0f, 3.0f, 3.0f);
 
 	Vect Blue(0.0f, 0.0f, 1.0f, 1.0f);
-	pGObj_BulletSphere = new GraphicsObject_WireframeConstantColor(ModelManager::Get("Sphere"), ShaderManager::Get("ConstantColor"), Blue);
+	pGObj_BulletSphere = new GraphicsObject_ColorFlat(ModelManager::Get("Sphere"), Blue);
 }
 
 Bullet::~Bullet()
@@ -46,7 +46,7 @@ void Bullet::Update()
 
 void Bullet::Draw()
 {
-	pGObj_BulletSphere->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera());
+	pGObj_BulletSphere->Render();
 }
 
 void Bullet::Destroy()

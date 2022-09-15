@@ -1,49 +1,46 @@
 // SpaceFrigate 
 
 #include "SpaceFrigate.h"
-#include "../Surreal Engine/ModelManager.h"
-#include "../Surreal Engine/ShaderManager.h"
-#include "../Surreal Engine/TextureManager.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/Drawable.h"
-#include "../Surreal Engine/Updateable.h"
-#include "../Surreal Engine/Alarmable.h"
-#include "../Surreal Engine/Inputable.h"
-#include "../Surreal Engine/Collidable.h"
-#include "../Surreal Engine/SceneManager.h"
+#include "Surreal Engine/ModelManager.h"
+#include "Surreal Engine/ShaderManager.h"
+#include "Surreal Engine/TextureManager.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/Drawable.h"
+#include "Surreal Engine/Updateable.h"
+#include "Surreal Engine/Alarmable.h"
+#include "Surreal Engine/Inputable.h"
+#include "Surreal Engine/Collidable.h"
+#include "Surreal Engine/SceneManager.h"
 #include "BulletFactory.h"
-#include "../Surreal Engine/Visualizer.h"
+#include "Surreal Engine/Visualizer.h"
+#include "Surreal Engine/Colors.h"
 
 SpaceFrigate::SpaceFrigate()
 {
-	// Light
-	Vect LightColor(1.50f, 1.50f, 1.50f, 1.0f);
-	Vect LightPos(1.0f, 1.0f, 1.0f, 1.0f);
-	pGObj_SpaceFrigateLight = new GraphicsObject_TextureLight(ModelManager::Get("SpaceFrigate"), ShaderManager::Get("Light"), TextureManager::Get("SpaceFrigate"), LightColor, LightPos);
+	pGObj_SpaceFrigateLight = new GraphicsObject_TextureFlat(ModelManager::Get("SpaceFrigate"), TextureManager::Get("SpaceFrigate"));
 
-	Vect Blue(0.0f, 0.0f, 1.0f, 1.0f);
-	pGObj_SpaceshipBSphere = new GraphicsObject_WireframeConstantColor(ModelManager::Get("Sphere"), ShaderManager::Get("ConstantColor"), Blue);
+	pGObj_SpaceshipBSphere = new GraphicsObject_ColorFlat(ModelManager::Get("Sphere"), Color::Blue);
 
 	// Spaceship
 	ShipScale.set(SCALE, 0.5f, 0.5f, 0.5f);
-	ShipRotTrans = Matrix(ROT_Y, 90) * Matrix(TRANS, 0, 20, 0);
+	ShipRotTrans = Matrix(ROT_Y, 90) * Matrix(TRANS, -40, 20, 0);
 
 	// Creating matrices for in-world placement
 	Matrix world;
 	world = ShipScale * ShipRotTrans;
 	pGObj_SpaceFrigateLight->SetWorld(world);
 
-	CamShipOffset.set(0, 50, -150);
+	CamShipOffset.set(0, -50, -150);
 	CamLookAt.set(0, 10, 100);
 
 	Updateable::SubmitUpdateRegistration();
 	Drawable::SubmitDrawRegistration();
-	Inputable::SubmitKeyRegistration(AZUL_KEY::KEY_F, EventType::KEY_PRESS);
+	Inputable::SubmitKeyRegistration(SURREAL_KEY::F_KEY, EventType::KEY_PRESS);
 	//Alarmable::SubmitAlarmRegistration(0, 5.0f);
 
 	Collidable::SetCollidableGroup<SpaceFrigate>(); 
 	Collidable::SubmitCollisionRegistration();
-	this->SetColliderModel(pGObj_SpaceFrigateLight->getModel());
+	this->SetColliderModel(pGObj_SpaceFrigateLight->GetModel(), OBB);
 }
 
 SpaceFrigate::~SpaceFrigate()
@@ -59,21 +56,21 @@ void SpaceFrigate::Update()
 {
 	// Ship control. See also GAM 325/Week3 here: http://facweb.cs.depaul.edu/andre/GAM325/lecturenotes.html
 	// Ship Rotation movement (not using time-based values for simplicity)
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_J))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::J_KEY))
 	{
 		ShipRotTrans = Matrix(ROT_Y, ShipRotAng) * ShipRotTrans;
 	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_L))
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::L_KEY))
 	{
 		ShipRotTrans = Matrix(ROT_Y, -ShipRotAng) * ShipRotTrans;
 	}
 
 	// Ship translation movement (not using time-based values for simplicity)
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_I))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::I_KEY))
 	{
 		ShipRotTrans = Matrix(TRANS, Vect(0, 0, ShipTransSpeed)) * ShipRotTrans;
 	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_K))
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::K_KEY))
 	{
 		ShipRotTrans = Matrix(TRANS, Vect(0, 0, -ShipTransSpeed)) * ShipRotTrans;
 	}
@@ -88,14 +85,14 @@ void SpaceFrigate::Update()
 	// Placing the camera relative to the spaceship
 	Vect vNewCamPos = CamLookAt * ShipRotTrans;		// This moves the cam position relative to ship's position and rotation
 	Vect vNewLookAt = CamShipOffset * ShipRotTrans;   // This moves the look-at point relative to ship's position and rotation
-	pCam->setOrientAndPosition( Vect(0, 1, 0), vNewCamPos, vNewLookAt);
-	pCam->updateCamera();
+	pCam->SetOrientAndPosition( Vect(0, 1, 0), vNewCamPos, vNewLookAt);
+	pCam->UpdateCamera();
 	
 
 	//*
 	// Adjusting the spaceship's bounding sphere
-	Vect vBSSize = pGObj_SpaceFrigateLight->getModel()->getRadius() * Vect(1, 1, 1);
-	Vect vBSPos = pGObj_SpaceFrigateLight->getModel()->getCenter();
+	Vect vBSSize = pGObj_SpaceFrigateLight->GetModel()->GetRadius() * Vect(1, 1, 1);
+	Vect vBSPos = pGObj_SpaceFrigateLight->GetModel()->GetCenter();
 
 	// Adjust the Bounding Sphere's position and scale to fit the Ship's center and scale
 	Matrix worldBS = Matrix(SCALE, vBSSize) * Matrix(TRANS, vBSPos) * world;
@@ -103,7 +100,7 @@ void SpaceFrigate::Update()
 	pGObj_SpaceshipBSphere->SetWorld(worldBS);
 
 	// Toggle the bounding sphere's visibility
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_SPACE))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::SPACE_KEY))
 	{
 		BsphereToggle = true;
 		//DebugMsg::out("Bounding sphere: On\n");
@@ -120,31 +117,31 @@ void SpaceFrigate::Update()
 
 void SpaceFrigate::Draw()
 {
-	pGObj_SpaceFrigateLight->Render(this->pCam);
+	pGObj_SpaceFrigateLight->Render();
 	if (BsphereToggle)
 	{
-		pGObj_SpaceshipBSphere->Render(this->pCam);
+		pGObj_SpaceshipBSphere->RenderWireframe();
 	}
 }
 
 void SpaceFrigate::Collision(SpaceFrigate* sf)
 {
 	sf;
-	DebugMsg::out("Frigate Collide Frigate\n");
+	Trace::out("Frigate Collide Frigate\n");
 }
 
 void SpaceFrigate::Collision(HydraTest* sf)
 {
 	sf;
-	DebugMsg::out("Frigate Collide Hydra\n");
+	Trace::out("Frigate Collide Hydra\n");
 }
 
-void SpaceFrigate::KeyPressed(AZUL_KEY k)
+void SpaceFrigate::KeyPressed(SURREAL_KEY k)
 {
 	//Shooting
-	if (k == AZUL_KEY::KEY_F)
+	if (k == SURREAL_KEY::F_KEY)
 	{
-		DebugMsg::out("Pew Pew\n");
+		Trace::out("Pew Pew\n");
 		BulletFactory::CreateBullet(ShipRotTrans); 
 	}
 }

@@ -3,10 +3,9 @@
 #ifndef _Bullet
 #define _Bullet
 
-#include "AzulCore.h"
 #include "../Surreal Engine/GameObject.h"
 
-class GraphicsObject_WireframeConstantColor;
+class GraphicsObject_ColorFlat;
 
 class Bullet : public GameObject
 {
@@ -34,7 +33,7 @@ private:
 	Matrix Pos;
 	Matrix StartPos; 
 	Vect Direction;
-	GraphicsObject_WireframeConstantColor* pGObj_BulletSphere;
+	GraphicsObject_ColorFlat* pGObj_BulletSphere;
 	Camera* pCam;
 };
 

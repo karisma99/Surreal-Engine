@@ -3,8 +3,6 @@
 #ifndef _FishManager
 #define _FishManager
 
-#include "AzulCore.h"
-
 class SurrealSprite;
 
 class FishManager

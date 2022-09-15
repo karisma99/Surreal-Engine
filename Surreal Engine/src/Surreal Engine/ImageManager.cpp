@@ -13,9 +13,7 @@ void ImageManager::privLoad(const std::string& key, Texture* tex)
 {
 	assert(StorageMap.find(key) == StorageMap.end());
 
-	std::string ExpectedPath = DefaultPath;
-
-	StorageMap.insert(std::pair<std::string, Image*>(key, new Image(tex, new Rect(0.0f, 0.0f, (float)tex->getWidth(), (float)tex->getHeight()))));
+	StorageMap.insert(std::pair<std::string, Image*>(key, new Image(tex, new Rect(0.0f, 0.0f, (float)tex->GetWidth(), (float)tex->GetHeight()))));
 }
 
 void ImageManager::privLoad(const std::string& key, Texture* tex, Rect* r)

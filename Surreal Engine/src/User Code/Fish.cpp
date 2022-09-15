@@ -1,26 +1,25 @@
-// SpaceFrigate 
+// Fish 
 
 #include "Fish.h"
-#include "../Surreal Engine/ModelManager.h"
-#include "../Surreal Engine/ShaderManager.h"
-#include "../Surreal Engine/TextureManager.h"
-#include "../Surreal Engine/CameraManager.h"
-#include "../Surreal Engine/Drawable.h"
-#include "../Surreal Engine/Updateable.h"
-#include "../Surreal Engine/Alarmable.h"
-#include "../Surreal Engine/SceneManager.h"
-#include "../User Code/BubbleManager.h"
-#include "../User Code/FishManager.h"
+#include "Surreal Engine/ModelManager.h"
+#include "Surreal Engine/ShaderManager.h"
+#include "Surreal Engine/TextureManager.h"
+#include "Surreal Engine/CameraManager.h"
+#include "Surreal Engine/Drawable.h"
+#include "Surreal Engine/Updateable.h"
+#include "Surreal Engine/Alarmable.h"
+#include "Surreal Engine/SceneManager.h"
+#include "User Code/BubbleManager.h"
+#include "User Code/FishManager.h"
+#include "Surreal Engine/Colors.h"
+#include "Surreal Engine/TimeManager.h"
+#include "Surreal Engine/TerrainObject.h"
 
 Fish::Fish()
 {
-	// Light
-	Vect LightColor(1.50f, 1.50f, 1.50f, 1.0f);
-	Vect LightPos(1.0f, 1.0f, 1.0f, 1.0f);
-	pGObj_FishLight = new GraphicsObject_TextureLight(ModelManager::Get("Fish"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos);
-
-	Vect Blue(0.0f, 0.0f, 1.0f, 1.0f);
-	pGObj_FishBSphere = new GraphicsObject_WireframeConstantColor(ModelManager::Get("Sphere"), ShaderManager::Get("ConstantColor"), Blue);
+	pGObj_FishLight = new GraphicsObject_TextureFlat(ModelManager::Get("Fish"), TextureManager::Get("Calico"));
+	currentObject = pGObj_FishLight;
+	pGObj_FishBSphere = new GraphicsObject_ColorFlat(ModelManager::Get("Sphere"), Color::Blue);
 
 	// Spaceship
 	FishScale.set(SCALE, 30.0f, 7.0f, 10.0f);
@@ -31,7 +30,7 @@ Fish::Fish()
 	world = FishScale * FishRotTrans;
 	pGObj_FishLight->SetWorld(world);
 
-	CamShipOffset.set(-300, 100, 0);
+	CamShipOffset.set(-50, -50, 0);
 	CamLookAt.set(0, 10, 0);
 
 	SetModels(); 
@@ -41,12 +40,13 @@ Fish::Fish()
 	
 	Updateable::SubmitUpdateRegistration();
 	Drawable::SubmitDrawRegistration();
-	Inputable::SubmitKeyRegistration(AZUL_KEY::KEY_F, EventType::KEY_PRESS);
+	Inputable::SubmitKeyRegistration(SURREAL_KEY::F_KEY, EventType::KEY_PRESS);
 	//Alarmable::SubmitAlarmRegistration(AlarmableManager::Alarm0, 3.0f);
+	Alarmable::SubmitAlarmRegistration(AlarmableManager::Alarm1, 60.0f * TimeManager::GetFrameTime());
 
 	Collidable::SetCollidableGroup<Fish>(); 
 	Collidable::SubmitCollisionRegistration(); 
-	this->SetColliderModel(pGObj_FishLight->getModel());
+	this->SetColliderModel(pGObj_FishLight->GetModel(), AABB);
 }
 
 Fish::~Fish()
@@ -67,45 +67,68 @@ Fish::~Fish()
 void Fish::Update()
 {
 	moving = false;
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_J))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::J_KEY))
 	{
-		FishRotTrans = Matrix(ROT_Y, FishRotAng) * FishRotTrans;
+		FishRotTrans = Matrix(ROT_Y, -FishRotAng * TimeManager::GetFrameTime()) * FishRotTrans;
 		moving = true;
 	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_L))
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::L_KEY))
 	{
-		FishRotTrans = Matrix(ROT_Y, -FishRotAng) * FishRotTrans;
-		moving = true;
-	}
-
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_I))
-	{
-		FishRotTrans = Matrix(TRANS, Vect(FishTransSpeed, 0, 0)) * FishRotTrans;
-		moving = true;
-	}
-	else if (Keyboard::GetKeyState(AZUL_KEY::KEY_K))
-	{
-		FishRotTrans = Matrix(TRANS, Vect(-FishTransSpeed, 0, 0)) * FishRotTrans;
+		FishRotTrans = Matrix(ROT_Y, FishRotAng * TimeManager::GetFrameTime()) * FishRotTrans;
 		moving = true;
 	}
 
-	// Spaceship adjust matrix
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::I_KEY))
+	{
+		FishRotTrans = Matrix(TRANS, Vect(FishTransSpeed * TimeManager::GetFrameTime(), 0, 0)) * FishRotTrans;
+		moving = true;
+	}
+	else if (Keyboard::GetKeyInputState(SURREAL_KEY::K_KEY))
+	{
+		FishRotTrans = Matrix(TRANS, Vect(-FishTransSpeed * TimeManager::GetFrameTime(), 0, 0)) * FishRotTrans;
+		moving = true;
+	}
 
-	Matrix world = FishScale * FishRotTrans;
+	// Fish adjust matrix
+	Matrix world;
+	Vect vNewCamPos;
+	Vect vNewLookAt;
+	if (SceneManager::GetCurrentScene()->GetTerrain())
+	{
+		float offset = 50;
+		Vect terrainCellCenter = SceneManager::GetCurrentScene()->GetTerrain()->GetCellCenterAtPosition(Vect(FishRotTrans.M12(), FishRotTrans.M13(), FishRotTrans.M14()));
+		//FishRotTrans = Matrix(TRANS, 0, terrainCellCenter.Y() + offset, 0) * FishRotTrans;
+
+		//// Rotate according to terrain
+		//Vect terrainNormal = SceneManager::GetCurrentScene()->GetTerrain()->GetTerrainNormalAtPosition(Vect(FishRotTrans.M12(), FishRotTrans.M13(), FishRotTrans.M14()));
+		//Vect r = terrainNormal.cross(FishRotTrans.get(ROW_2));
+		//Vect fwd = r.cross(terrainNormal);
+		//FishRotTrans = Matrix(ROT_ORIENT, fwd, terrainNormal) * Matrix(TRANS, FishRotTrans.get(ROW_3));
+
+		world = FishScale * FishRotTrans * Matrix(TRANS, 0, terrainCellCenter.Y() - offset, 0);
+		vNewCamPos = CamLookAt * FishRotTrans * Matrix(TRANS, 0, terrainCellCenter.Y() - offset, 0);
+		vNewLookAt = CamShipOffset * FishRotTrans * Matrix(TRANS, 0, terrainCellCenter.Y() - offset, 0);
+	}
+	else
+	{
+		world = FishScale * FishRotTrans;
+		vNewCamPos = CamLookAt * FishRotTrans;
+		vNewLookAt = CamShipOffset * FishRotTrans;
+	}
+
+	
 	pGObj_FishLight->SetWorld(world);
 	this->UpdateCollisionData(world);
 
 
 	// Placing the camera relative to the spaceship
-	Vect vNewCamPos = CamLookAt * FishRotTrans;		// This moves the cam position relative to ship's position and rotation
-	Vect vNewLookAt = CamShipOffset * FishRotTrans;   // This moves the look-at point relative to ship's position and rotation
-	SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera()->setOrientAndPosition(Vect(0, 1, 0), vNewCamPos, vNewLookAt);
-	SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera()->updateCamera();
+	SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera()->SetOrientAndPosition(Vect(0, 1, 0), vNewCamPos, vNewLookAt);
+	SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera()->UpdateCamera();
 
 	//*
 	// Adjusting the spaceship's bounding sphere
-	Vect vBSSize = pGObj_FishLight->getModel()->getRadius() * Vect(1, 1, 1);
-	Vect vBSPos = pGObj_FishLight->getModel()->getCenter();
+	Vect vBSSize = pGObj_FishLight->GetModel()->GetRadius() * Vect(1, 1, 1);
+	Vect vBSPos = pGObj_FishLight->GetModel()->GetCenter();
 
 	// Adjust the Bounding Sphere's position and scale to fit the Ship's center and scale
 	Matrix worldBS = Matrix(SCALE, vBSSize) * Matrix(TRANS, vBSPos) * world;
@@ -117,7 +140,7 @@ void Fish::Update()
 	}
 
 	// Toggle the bounding sphere's visibility
-	if (Keyboard::GetKeyState(AZUL_KEY::KEY_SPACE))
+	if (Keyboard::GetKeyInputState(SURREAL_KEY::SPACE_KEY))
 	{
 		BsphereToggle = true;
 		//DebugMsg::out("Bounding sphere: On\n");
@@ -132,6 +155,60 @@ void Fish::Update()
 
 void Fish::Draw()
 {
+	currentObject->Render();
+
+	if (BsphereToggle)
+	{
+		pGObj_FishBSphere->RenderWireframe();
+	}
+} 
+
+void Fish::KeyPressed(SURREAL_KEY k)
+{
+	if (k == SURREAL_KEY::F_KEY)
+	{
+		BubbleManager::ShootBubble(FishRotTrans);
+	}
+}
+
+void Fish::Alarm0()
+{
+	Updateable::SubmitUpdateDeregistration();
+	Drawable::SubmitDrawDeregistration();
+}
+
+void Fish::Alarm1()
+{
+	CheckModelSwitch();
+	Alarmable::SubmitAlarmRegistration(AlarmableManager::Alarm1, 60.0f * TimeManager::GetFrameTime());
+}
+
+void Fish::Collision(Hydra* sf)
+{
+	sf; 
+	Trace::out("Fish Collide Hydra\n");
+	FishManager::LoseHeart();
+}
+
+void Fish::Collision(Food* sf)
+{
+	sf;
+	Trace::out("Fish Collide Food\n");
+	
+}
+
+void Fish::CollisionTerrain()
+{
+	Trace::out("Fish Collide Terrain\n");
+}
+
+Matrix Fish::GetPosition() 
+{
+	return FishRotTrans;
+}
+
+void Fish::CheckModelSwitch()
+{
 	if (modelRef == modelCol.end())
 	{
 		forward = false; 
@@ -144,8 +221,7 @@ void Fish::Draw()
 
 	if (moving)
 	{
-		this->SetColliderModel((*modelRef)->getModel());
-		(*modelRef)->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera());
+		currentObject = *modelRef;
 
 		if (forward)
 		{
@@ -158,67 +234,26 @@ void Fish::Draw()
 	}
 	else 
 	{
-		(*modelRef)->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera());
+		currentObject = *modelRef;
 	}
-
-	if (BsphereToggle)
-	{
-		pGObj_FishBSphere->Render(SceneManager::GetCurrentScene()->GetCameraManager()->GetCurrentCamera());
-	}
-} 
-
-void Fish::KeyPressed(AZUL_KEY k)
-{
-	if (k == AZUL_KEY::KEY_F)
-	{
-		BubbleManager::ShootBubble(FishRotTrans);
-	}
-}
-
-void Fish::Alarm0()
-{
-	Updateable::SubmitUpdateDeregistration();
-	Drawable::SubmitDrawDeregistration();
-}
-
-void Fish::Collision(Hydra* sf)
-{
-	sf; 
-	DebugMsg::out("Fish Collide Hydra\n");
-	FishManager::LoseHeart();
-}
-
-void Fish::Collision(Food* sf)
-{
-	sf;
-	DebugMsg::out("Fish Collide Food\n");
-	
-}
-
-Matrix Fish::GetPosition() 
-{
-	return FishRotTrans;
 }
 
 void Fish::SetModels()
-{
-	Vect LightColor(1.50f, 1.50f, 1.50f, 1.0f);
-	Vect LightPos(1.0f, 1.0f, 1.0f, 1.0f);
-	
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish1"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish2"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish3"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish4"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish5"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish6"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish7"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish8"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish9"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish10"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish11"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish12"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish13"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish14"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish15"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
-	modelCol.push_back(new GraphicsObject_TextureLight(ModelManager::Get("Fish16"), ShaderManager::Get("Light"), TextureManager::Get("Calico"), LightColor, LightPos));
+{	
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish1"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish2"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish3"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish4"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish5"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish6"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish7"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish8"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish9"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish10"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish11"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish12"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish13"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish14"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish15"), TextureManager::Get("Calico")));
+	modelCol.push_back(new GraphicsObject_TextureFlat(ModelManager::Get("Fish16"), TextureManager::Get("Calico")));
 }

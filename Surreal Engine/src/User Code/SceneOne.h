@@ -27,7 +27,6 @@ private:
 
 	World* pWorld;
 	Fish* pFish;
-	Hydra* pHydra;
 	GodCam* pGodCam; 
 	Hud* pHud;
 

@@ -3,9 +3,7 @@
 #ifndef _CameraManager
 #define _CameraManager
 
-#include "Camera.h"
-
-class Camera;
+#include "Surreal Graphics/Camera.h"
 
 class CameraManager
 {

@@ -2,10 +2,11 @@
 #ifndef _WorldPlane
 #define _WorldPlane
 
-#include "../Surreal Engine/GameObject.h"
+#include "Surreal Engine/GameObject.h"
+#include "Surreal Engine/Keyboard.h"
 
 class GraphicsObject_TextureFlat;
-class GraphicsObject_ColorNoTexture;
+class GraphicsObject_ColorFlat;
 
 class WorldPlane : public GameObject
 {
@@ -17,14 +18,14 @@ public:
 
 	virtual void Update();
 	virtual void Draw();
-	virtual void KeyPressed(AZUL_KEY k);
-	virtual void KeyReleased(AZUL_KEY k);
+	virtual void KeyPressed(SURREAL_KEY k);
+	virtual void KeyReleased(SURREAL_KEY k);
 
 	void SetCamera(Camera* c);
 
 private:
 	GraphicsObject_TextureFlat* pGObj_Plane;
-	GraphicsObject_ColorNoTexture* pGObj_Axis;
+	GraphicsObject_ColorFlat *pGObj_Axis;
 	Camera* pCam;
 };
 

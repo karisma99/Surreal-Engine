@@ -3,16 +3,17 @@
 #ifndef _VisualizerCommandPool
 #define _VisualizerCommandPool
 
-#include "AzulCore.h"
 #include <stack>
 #include <queue>
+#include "Collidable.h"
+
 class VisualizerCommand;
 
 class VisualizerCommandPool
 {
 private:
 	std::stack<VisualizerCommand*> recycledItems;
-	std::queue<VisualizerCommand*> activeItems;
+	std::queue<VisualizerCommand*> createdItems;
 
 public:
 	VisualizerCommandPool();
@@ -20,7 +21,7 @@ public:
 	VisualizerCommandPool& operator=(const VisualizerCommandPool&) = delete;
 	~VisualizerCommandPool();
 
-	VisualizerCommand* GetCommand(Matrix m, Vect v);
+	VisualizerCommand* GetCommand(Matrix m, Vect v, Collidable::VolumeType vol);
 
 	void ReturnCommand(VisualizerCommand* b);
 };

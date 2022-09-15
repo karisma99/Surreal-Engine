@@ -2,16 +2,16 @@
 #define _KeyboardEventManager
 
 #include <map>
-#include "AzulCore.h"
 #include "EventType.h"
 #include "SingleKeyEventManager.h"
+#include "Keyboard.h"
 
 class Inputable;
 
 class KeyboardEventManager
 {
 private:
-	using MapKeyManager = std::map<AZUL_KEY, SingleKeyEventManager*>;
+	using MapKeyManager = std::map<SURREAL_KEY, SingleKeyEventManager*>;
 	MapKeyManager mapSKMgrs;
 
 public:
@@ -25,7 +25,7 @@ public:
 
 	void ProcessKeys();
 
-	StorageListRef Register(Inputable* up, AZUL_KEY k, EventType e);
+	StorageListRef Register(Inputable* up, SURREAL_KEY k, EventType e);
 	void Deregister(EventType e, StorageListRef ref, SingleKeyEventManager::InputableCollectionRef SingleRef);
 
 };

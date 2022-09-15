@@ -8,6 +8,7 @@
 #include "InputDeregistrationCommand.h"
 #include "KeyboardEventManager.h"
 #include "SingleKeyEventManager.h"
+#include "Keyboard.h"
 
 class InputRegistrationCommand;
 class InputDeregistrationCommand;
@@ -22,18 +23,18 @@ public:
 	Inputable& operator = (const Inputable& t) = delete;
 	virtual ~Inputable();
 
-	void SubmitKeyRegistration(AZUL_KEY k, EventType e);
-	void SubmitKeyDeregistration(AZUL_KEY k, EventType e);
+	void SubmitKeyRegistration(SURREAL_KEY k, EventType e);
+	void SubmitKeyDeregistration(SURREAL_KEY k, EventType e);
 
 private:
-	virtual void KeyPressed(AZUL_KEY k);
-	virtual void KeyReleased(AZUL_KEY k);
+	virtual void KeyPressed(SURREAL_KEY k);
+	virtual void KeyReleased(SURREAL_KEY k);
 
-	void InputRegistration(AZUL_KEY k, EventType e);
-	void InputDegregistration(AZUL_KEY k, EventType e);
+	void InputRegistration(SURREAL_KEY k, EventType e);
+	void InputDegregistration(SURREAL_KEY k, EventType e);
 
-	void SetSingleDeleteRef(AZUL_KEY k, EventType e, SingleKeyEventManager::InputableCollectionRef ref);
-	void SetKeyboardDeleteRef(AZUL_KEY k, EventType e, KeyboardEventManager::StorageListRef ref);
+	void SetSingleDeleteRef(SURREAL_KEY k, EventType e, SingleKeyEventManager::InputableCollectionRef ref);
+	void SetKeyboardDeleteRef(SURREAL_KEY k, EventType e, KeyboardEventManager::StorageListRef ref);
 
 	struct RegistrationData
 	{
@@ -44,7 +45,7 @@ private:
 		SingleKeyEventManager::InputableCollectionRef pMyDeleteSingleRef;
 	};
 
-	using KeyEvent = std::pair<AZUL_KEY, EventType>;
+	using KeyEvent = std::pair<SURREAL_KEY, EventType>;
 	using InputableKeys = std::map<KeyEvent, RegistrationData>;
 	InputableKeys keysMap;
 

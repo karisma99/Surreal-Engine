@@ -3,7 +3,7 @@
 #ifndef _HydraFactory
 #define _HydraFactory
 
-#include "AzulCore.h"
+#include "Matrix.h"
 #include "HydraPool.h"
 
 class GameObject;

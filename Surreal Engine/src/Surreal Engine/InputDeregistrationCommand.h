@@ -3,8 +3,8 @@
 
 #include "CommandBase.h"
 #include "Inputable.h"
-#include "AzulCore.h"
 #include "EventType.h"
+#include "Keyboard.h"
 
 class KeyboardEventManager;
 
@@ -12,7 +12,7 @@ class InputDeregistrationCommand : public CommandBase
 {
 public:
 	InputDeregistrationCommand() = default;
-	InputDeregistrationCommand(Inputable* up, AZUL_KEY k, EventType e);
+	InputDeregistrationCommand(Inputable* up, SURREAL_KEY k, EventType e);
 	InputDeregistrationCommand(const InputDeregistrationCommand& c) = delete;
 	InputDeregistrationCommand& operator = (const InputDeregistrationCommand& t) = delete;
 	~InputDeregistrationCommand() = default;
@@ -22,7 +22,7 @@ public:
 private:
 
 	Inputable* pInput;
-	AZUL_KEY key;
+	SURREAL_KEY key;
 	EventType eventType;
 
 };

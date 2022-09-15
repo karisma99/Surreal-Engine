@@ -5,10 +5,12 @@
 
 #include <list>
 #include "Vect.h"
-#include "GraphicsObject_WireframeConstantColor.h"
 #include "CollisionVolumeBSphere.h"
+#include "CollisionVolumeAABB.h"
+#include "CollisionVolumeOBB.h"
 
 class VisualizerCommand; 
+class GraphicsObject_ColorFlat;
 
 class Visualizer
 {
@@ -35,6 +37,9 @@ private:
 
 public:
 	static void ShowSphere(const CollisionVolumeBSphere& S, const Vect& V = DEFAULT_COLOR) { Instance().privShowSphere(S, V); };
+	static void ShowBox(const CollisionVolumeAABB& B, const Vect& V = DEFAULT_COLOR) { Instance().privShowBox(B, V); };
+	static void ShowBox(const CollisionVolumeOBB& B, const Vect& V = DEFAULT_COLOR) { Instance().privShowBox(B, V); };
+	static void ShowCollisionVolume(const CollisionVolume& c, const Vect& col = DEFAULT_COLOR) { Instance().privShowCollisionVolume(c, col); };
 
 private:
 
@@ -47,10 +52,17 @@ private:
 	void privRenderSphere(Matrix& S, const Vect& col);
 	static void RenderSphere(Matrix& S, const Vect& col) { Instance().privRenderSphere(S, col); };
 
+	void privRenderBox(Matrix& B, const Vect& col);
+	static void RenderBox(Matrix& B, const Vect& col) { Instance().privRenderBox(B, col); };
+
 	void privShowSphere(const CollisionVolumeBSphere& S, const Vect& V); 
+	void privShowBox(const CollisionVolumeAABB& B, const Vect& V);
+	void privShowBox(const CollisionVolumeOBB& B, const Vect& V);
+	void privShowCollisionVolume(const CollisionVolume& S, const Vect& V); 
 
 	static Vect DEFAULT_COLOR; 
-	GraphicsObject_WireframeConstantColor* WFUnitSphere; 
+	GraphicsObject_ColorFlat* WFUnitSphere;
+	GraphicsObject_ColorFlat* WFUnitBox;
 
 };
 

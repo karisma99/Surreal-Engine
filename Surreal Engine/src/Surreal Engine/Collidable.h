@@ -4,15 +4,25 @@
 #include "RegistrationState.h"
 #include "CollidableManager.h"
 #include "SceneAttorney.h"
-#include "CollisionVolumeBSphere.h"
+#include "CollisionVolume.h"
+
 
 class CollidableManager;
 class CollisionRegistrationCommand;
 class CollisionDeregistrationCommand;
+class CollisionVolume;
+class CollisionVolumeBSphere;
 
 class Collidable
 {
 	friend class CollidableAttorney;
+public:
+	enum VolumeType 
+	{
+		BSPHERE,
+		AABB,
+		OBB
+	};
 
 public:
 	Collidable();
@@ -20,9 +30,12 @@ public:
 	Collidable& operator = (const Collidable& t) = delete;
 	virtual ~Collidable();
 
+	virtual void CollisionTerrain() { };
+
 	void SubmitCollisionRegistration();
 	void SubmitCollisionDeregistration();
-	const CollisionVolumeBSphere& GetBSphere();
+	const CollisionVolume& GetCollisionVolume();
+	const CollisionVolumeBSphere& GetDefaultVolume();
 
 private:
 	void SceneRegistration();
@@ -35,7 +48,8 @@ private:
 	CollisionDeregistrationCommand* pDeregisterCmd;
 
 	Model* pModel; 
-	CollisionVolumeBSphere BSphere;
+	CollisionVolume* ColVolume; 
+	CollisionVolumeBSphere* DefaultBSphere;
 
 protected:
 	template<typename C>
@@ -45,7 +59,7 @@ protected:
 	}
 
 	void UpdateCollisionData(const Matrix& mat);
-	void SetColliderModel(Model* const mod);
+	void SetColliderModel(Model* const mod, VolumeType vol);
 
 };
 

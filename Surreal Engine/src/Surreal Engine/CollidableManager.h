@@ -5,6 +5,7 @@
 #include "CollisionTestCommandBase.h"
 #include "CollisionTestPairCommand.h"
 #include "CollisionTestSelfCommand.h"
+#include "CollisionTerrainCommand.h"
 #include "CollisionDispatch.h"
 #include <vector>
 
@@ -13,6 +14,7 @@ class CollidableGroup;
 class CollisionTestCommandBase; 
 class CollisionTestPairCommand; 
 class CollisionTestSelfCommand; 
+class CollisionTerrainCommand;
 
 class CollidableManager
 {
@@ -69,6 +71,14 @@ public:
 		CollisionDispatch<C1, C1>* pDispatch = new CollisionDispatch<C1, C1>();
 
 		colTestCommands.push_back(new CollisionTestSelfCommand(pg1, pDispatch));
+	}
+
+	template<typename C1>
+	void SetCollisionTerrain()
+	{
+		CollidableGroup* pg1 = ColGroupCollection[GetTypeID<C1>()];
+
+		colTestCommands.push_back(new CollisionTerrainCommand(pg1));
 	}
 
 	CollidableGroup* GetColGroup(STypeID id);

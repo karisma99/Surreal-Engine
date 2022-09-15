@@ -2,10 +2,9 @@
 #ifndef _Hydra
 #define _Hydra
 
-#include "../Surreal Engine/GameObject.h"
-#include "AzulCore.h"
-class GraphicsObject_TextureLight;
-class GraphicsObject_WireframeConstantColor;
+#include "Surreal Engine/GameObject.h"
+class GraphicsObject_TextureFlat;
+class GraphicsObject_ColorFlat;
 class Fish;
 class Bubble;
 
@@ -32,13 +31,13 @@ private:
 	void FacePlayer();
 	void Destroy();
 
-	GraphicsObject_TextureLight* pGObj_SpaceFrigateLight;
-	GraphicsObject_WireframeConstantColor* pGObj_SpaceshipBSphere;
+	GraphicsObject_TextureFlat* pGObj_SpaceFrigateLight;
+	GraphicsObject_ColorFlat* pGObj_SpaceshipBSphere;
 
 	Matrix HydraScale;
 	Matrix HydraRotTrans;
 	Matrix Direction;
-	const float HydraSpeed = 0.1f;
+	const float HydraSpeed = 225.0f;;
 	const float HydraRotAng = .05f;
 	bool BsphereToggle = false;
 	Vect CamLookAt;

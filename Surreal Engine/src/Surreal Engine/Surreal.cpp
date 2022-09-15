@@ -1,4 +1,3 @@
-#include "AzulCore.h"
 #include "Surreal.h"
 #include "ShaderManagerAttorney.h"
 #include "TextureManagerAttorney.h"
@@ -10,6 +9,9 @@
 #include "ImageManagerAttorney.h"
 #include "SpriteFontManagerAttorney.h"
 #include "ScreenLogAttorney.h"
+#include "Surreal Graphics/GPUController.h"
+#include "Surreal Graphics/WindowController.h"
+#include "TerrainObjectManagerAttorney.h"
 
 Surreal* Surreal::ptrInstance = nullptr;
 
@@ -19,21 +21,19 @@ Surreal* Surreal::ptrInstance = nullptr;
 //      starting to run.  This is where it can query for any required services 
 //      and load any non-graphic related content. 
 //-----------------------------------------------------------------------------
-void Surreal::Initialize()
+void Surreal::privInitialize(HWND hwnd)
 {
+	//Directx 11 init
+	assert(hwnd);
+	RECT rc;
+	BOOL err = GetClientRect(hwnd, &rc);
+	assert(err);
+	int mClientWidth = rc.right - rc.left;
+	int mClientHeight = rc.bottom - rc.top;
+	GPUController::InitDirect3D(hwnd, mClientWidth, mClientHeight);
+
 	// Surreal Window Device setup
 	GameInitialize();
-	// Use this area, for one time non-graphic creation
-}
-
-//-----------------------------------------------------------------------------
-// Game::LoadContent()
-//		Allows you to load all content needed for your engine,
-//	    such as objects, graphics, etc.
-//-----------------------------------------------------------------------------
-void Surreal::LoadContent()
-{
-	ShaderManagerAttorney::LoadDefaultShaders();
 	this->LoadResources();
 	SceneManagerAttorney::GameLoop::StartScene();
 }
@@ -44,7 +44,7 @@ void Surreal::LoadContent()
 //      Use this function to control process order
 //      Input, AI, Physics, Animation, and Graphics
 //-----------------------------------------------------------------------------
-void Surreal::Update()
+void Surreal::privUpdate()
 {
 	TimeManagerAttorney::ProcessTime();
 	SceneManagerAttorney::GameLoop::Update();
@@ -56,11 +56,13 @@ void Surreal::Update()
 //	    Use this for draw graphics to the screen.
 //      Only do rendering here
 //-----------------------------------------------------------------------------
-void Surreal::Draw()
+void Surreal::privDraw()
 {
+	GPUController::ResetContext();
 	VisualizerAttorney::GameLoop::VisualizeAll();
 	SceneManagerAttorney::GameLoop::Draw();
 	ScreenLogAttorney::Render();
+	GPUController::SwapChainSwitch();
 }
 
 //-----------------------------------------------------------------------------
@@ -68,13 +70,14 @@ void Surreal::Draw()
 //       unload content (resources loaded above)
 //       unload all content that was loaded before the Engine Loop started
 //-----------------------------------------------------------------------------
-void Surreal::UnLoadContent()
+void Surreal::privUnLoadContent()
 {
 	ShaderManagerAttorney::Delete();
 	TextureManagerAttorney::Delete();
 	ModelManagerAttorney::Delete();
 	ImageManagerAttorney::Delete();
 	SpriteFontManagerAttorney::Delete();
+	TerrainObjectManagerAttorney::Delete();
 
 	SceneManagerAttorney::GameLoop::Delete();
 	TimeManagerAttorney::Delete();
@@ -88,6 +91,36 @@ void Surreal::privDelete()
 {
 	delete ptrInstance;
 	ptrInstance = nullptr;
+}
+
+float Surreal::privGetTimeInSeconds()
+{
+	return TimeManager::GetTime();
+}
+
+int Surreal::privGetWidth()
+{
+	return WindowController::GetWindowWidth();
+}
+
+int Surreal::privGetHeight()
+{
+	return WindowController::GetWindowHeight();
+}
+
+void Surreal::privSetWindowName(const char* name)
+{
+	WindowController::SetWindowName(name);
+}
+
+void Surreal::privSetWidthHeight(int w, int h)
+{
+	WindowController::SetWindowWidthHeight(w, h);
+}
+
+void Surreal::privSetClearColor(float r, float g, float b, float a)
+{
+	r; g; b; a;
 }
 
 
